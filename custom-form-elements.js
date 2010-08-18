@@ -106,8 +106,11 @@ Example:
             ;
 
             $('label[for]')
-                .live('mousedown mouseup change', function(e){
-                    $('#' + $(this).attr('for') + '_cf').trigger(e.type);
+                .live('click', function(e){
+                    var input = $('#' + $(this).attr('for') + '_cf:not(.disabled)');
+                    if (input.length) {
+                        self.state(e, input);
+                    }
                 })
             ;
         },
@@ -121,21 +124,25 @@ Example:
             }
 
             var next = $(el).next(),
-                md = e.type === 'mousedown',
+                click = e.type === 'click',
+                muc = e.type === 'mouseup' || click,
                 cb = next.is('[type=checkbox]'),
                 rb = next.is('[type=radio]'),
                 checked = next.is(":checked"),
-                offset = this.options[(cb ? 'checkboxHeight' : 'radioHeight')] * (checked ? (md ? 3 : 0) : (md ? 1 : 2) )
+                offset = this.options[(cb ? 'checkboxHeight' : 'radioHeight')] * (checked ? (muc ? 0 : 3) : (muc ? 2 : 1) )
             ;
 
-            if ( !(cb || rb) ) {
+            if ( !(cb || rb) && click ) {
                 return;
             }
-
             $(el).css({'background-position': "0 -" + offset + 'px' });
 
-            if(!md) {
-                next.attr('checked', !checked);
+            if(muc && !click) {
+                if (checked) {
+                    next.removeAttr('checked');
+                } else {
+                    next.attr('checked', 'checked');
+                }
             }
 
         }
