@@ -1,13 +1,9 @@
 Custom Form Elements
 ====================
 
-A lightweight custom form styler for radio, checkbox and select elements.
+A lightweight custom form styler for radio, checkbox and select elements. Radio and Checkboxes have four states rather than just two.
 
-Radio and Checkboxes have four states rather than just two
-
-Developed by Ali Karbassi, [http://karbassi.com](http://karbassi.com)
-
-Inspired by Ryan Fait, [http://ryanfait.com](http://ryanfait.com)
+Developed by [Ali Karbassi](http://karbassi.com) and inspired by [Ryan Fait](http://ryanfait.com).
 
 This project lives on GitHub: [http://github.com/karbassi/Custom-Form-Elements](http://github.com/karbassi/Custom-Form-Elements)
 
@@ -16,15 +12,15 @@ This whole project is licensed under the MIT License: [http://opensource.org/lic
 Note
 -----
 
-* Requires jQuery 1.4+
+* Requires [jQuery 1.4+](http://jquery.com)
 * Call once your document is loaded.
 * The sprite order from top to bottom is:
   1. unchecked
   2. unchecked-mousedown
   3. checked
   4. checked-mousedown
-* 'checkboxHeight' and 'radioHeight' should all be set to 1/4th the sprite height.
-* 'selectWidth' is the width of the select box image.
+* `checkboxHeight` and `radioHeight` should all be set to 1/4th the sprite height.
+* `selectWidth` is the width of the select box image.
 
 Example
 --------
