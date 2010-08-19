@@ -1,6 +1,8 @@
 /*
 Custom Form Elements
 
+http://github.com/karbassi/Custom-Form-Elements
+
 Written by Ali Karbassi (karbassi.com)
 Original idea from Ryan Fait (ryanfait.com)
 
@@ -11,7 +13,6 @@ Note:
     - The sprite order from top to bottom is: unchecked, unchecked-clicked, checked, checked-clicked.
     - 'checkboxHeight' and 'radioHeight' should all be set to 1/4th the sprite height.
     - 'selectWidth' is the width of the select box image.
-
 
 Example:
 
@@ -38,7 +39,7 @@ Example:
         });
 
         // If you need to reinitialize dynamically added form elements:
-        cf.init();
+        cf.repaint();
 
     });
 
@@ -57,37 +58,34 @@ Example:
             // Merge options
             self.options = $.extend({}, CustomFormElements.options, options || {});
 
-            self.bind();
-            self.create();
-        },
-
-        create: function(){
-
-            // Add global styles
-            var self = this,
-                style = [
+            var css = [
                 'input.', self.options.styled, ' { display: none; } ',
                 'select.', self.options.styled, ' { position: relative; width: ', self.options.selectWidth, 'px; opacity: 0; filter: alpha(opacity=0); z-index: 5; } ',
                 '.disabled { opacity: 0.5; filter: alpha(opacity=50); } '
             ];
 
-            $('<style>' + style.join('') + '</style>').appendTo('head');
+            $('<style>' + css.join('') + '</style>').appendTo('head');
 
-            $('input.' + self.options.styled + '[type=checkbox], input.' + self.options.styled + '[type=radio], select.' + self.options.styled).each(function(index) {
+            self.bind();
+            self.repaint();
+        },
+
+        repaint: function(){
+            var self = this;
+
+            $('input.' + self.options.styled + '[type=checkbox], input.' + self.options.styled + '[type=radio], select.' + self.options.styled).each(function(){
 
                 // stop already created ones.
                 if ($(this).prev().is('[class*=' + self.options.uniqueClassName + ']')) {
                     return;
                 }
 
-                var cb = $(this).is('[type=checkbox]'),
-                    checked = $(this).is(':checked') ? 'background-position: 0 -' + ( self.options[cb ? 'checkboxHeight' : 'radioHeight'] * 2 ) + 'px' : '',
-                    style = [checked],
-                    selected = $('option:selected', this).text(),
+                var selected = $('option:selected', this).text(),
                     type = $(this).attr('type') === 'select-one' ? 'select' : $(this).attr('type'),
+                    style = 'style = "background-position: 0 -' + self.options[ type + 'Height'] * ($(this).is(':checked') ? 2 : 0) + 'px;"',
                     disabled = $(this).is(":disabled") ? 'disabled': '',
                     className = [self.options.uniqueClassName, type, disabled],
-                    span = '<span id="' + $(this).attr('id') + '_cf" class="' + className.join(' ') + '"' + (style.length ? 'style="' + style.join(';') : '') + '">' + selected + '</span>'
+                    span = '<span id="' + $(this).attr('id') + '_cf" class="' + className.join(' ') + '" ' + style + '">' + selected + '</span>'
                 ;
 
                 $(span).insertBefore(this);
@@ -98,64 +96,69 @@ Example:
         bind: function(){
             var self = this;
 
-            $('span.' + self.options.uniqueClassName + '.checkbox:not(.disabled), span.' + self.options.uniqueClassName + '.radio:not(.disabled), span.' + self.options.uniqueClassName + '.select:not(.disabled) + select')
-                .die('mousedown mouseup change')
-                .live('mousedown mouseup change', function(e){
-                    self.state(e, this);
+            $('span.' + self.options.uniqueClassName + '.checkbox:not(.disabled), span.' + self.options.uniqueClassName + '.radio:not(.disabled)')
+                .live('mousedown', function(e){
+                    self.mousedown(e, this);
+                })
+                .live('mouseup', function(e){
+                    self.mouseup(e, this);
                 })
             ;
 
-            $('label[for]')
-                .live('click', function(e){
-                    var input = $('#' + $(this).attr('for') + '_cf:not(.disabled)');
-                    if (input.length) {
-                        self.state(e, input);
-                    }
+            $('span.' + self.options.uniqueClassName + '.select:not(.disabled) + select')
+                .die('change')
+                .live('change', function(e){
+                    $(this).prev('span').text( $('option:selected', this).text() );
+                });
+
+            // Handle label clicks
+            $('input')
+                .live('change', function(e){
+                    self.reset();
                 })
             ;
         },
 
-        state: function(e, el){
+        reset: function(e, el){
+            var self = this;
 
-            // Catch the select box first; spans don't have a type.
-            if( $(el).attr('type') !== undefined ) {
-                $(el).prev().text( $('option:selected', el).text() );
-                return;
-            }
+            $('input.styled').each(function(k, v){
+                var offset = self.options[ $(this).attr('type') + 'Height'] * ($(this).is(':checked') ? 2 : 0);
+                $('#' + $(this).attr('id') + '_cf').css({'background-position': "0 -" + offset + 'px' });
+            });
+        },
 
-            var next = $(el).next(),
-                click = e.type === 'click',
-                muc = e.type === 'mouseup' || click,
-                cb = next.is('[type=checkbox]'),
-                rb = next.is('[type=radio]'),
-                checked = next.is(":checked"),
-                offset = this.options[(cb ? 'checkboxHeight' : 'radioHeight')] * (checked ? (muc ? 0 : 3) : (muc ? 2 : 1) )
-            ;
+        mousedown: function(e, el){
+            var self = this,
+                next = $(el).next('input'),
+                offset = self.options[ next.attr('type') + 'Height'] * (next.is(':checked') ? 3 : 1);
 
-            if ( !(cb || rb) && click ) {
-                return;
-            }
+            $(el).css({'background-position': "0 -" + offset + 'px' });
+        },
+
+        mouseup: function(e, el){
+            var self = this,
+                next = $(el).next('input');
+                offset = self.options[ next.attr('type') + 'Height'] * (next.is(':checked') && next.attr('type') === 'checkbox' ? 0 : 2);
+
             $(el).css({'background-position': "0 -" + offset + 'px' });
 
-            if(muc && !click) {
-                if (checked) {
-                    next.removeAttr('checked');
-                } else {
-                    next.attr('checked', 'checked');
-                }
-            }
+            $('input[type=radio][name=' + next.attr('name') + ']:not(#' + next.attr('id') + ')').each(function(){
+                $(this).prev('span').css({'background-position': '0 0' });
+            });
 
+            next.attr('checked', !next.is(':checked'));
         }
 
     };
 
     // Default CustomFormElements options
     CustomFormElements.options = {
-        styled: 'styled',
-        uniqueClassName: 'customFormElement',
-        checkboxHeight: 12,
-        radioHeight: 11,
-        selectWidth: 161
+        'styled': 'styled',
+        'uniqueClassName': 'customFormElement',
+        'checkboxHeight': 12,
+        'radioHeight': 11,
+        'selectWidth': 161
     };
 
     // Expose CustomFormElements to the global object
