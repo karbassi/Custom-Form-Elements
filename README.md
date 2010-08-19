@@ -2,16 +2,16 @@ Custom Form Elements
 ====================
 
 A lightweight custom form styler for radio, checkbox and select elements.
+
 Radio and Checkboxes have four states rather than just two
 
-Developed by Ali Karbassi, http://karbassi.com
-Inspired by Ryan Fait, http://ryanfait.com
+Developed by Ali Karbassi, [http://karbassi.com](http://karbassi.com)
 
-This project lives on GitHub:
-   http://github.com/karbassi/Custom-Form-Elements
+Inspired by Ryan Fait, [http://ryanfait.com](http://ryanfait.com)
 
-This whole project is licensed under the MIT License:
-   http://opensource.org/licenses/mit-license.php
+This project lives on GitHub: [http://github.com/karbassi/Custom-Form-Elements](http://github.com/karbassi/Custom-Form-Elements)
+
+This whole project is licensed under the MIT License: [http://opensource.org/licenses/mit-license.php](http://opensource.org/licenses/mit-license.php)
 
 Note
 -----
@@ -55,3 +55,8 @@ Example
         cf.repaint();
 
     });
+
+Demo
+-----
+
+[http://karbassi.github.com/Custom-Form-Elements/](http://karbassi.github.com/Custom-Form-Elements/)
