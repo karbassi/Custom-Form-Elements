@@ -106,7 +106,6 @@ Example:
             ;
 
             $('span.' + self.options.uniqueClassName + '.select:not(.disabled) + select')
-                .die('change')
                 .live('change', function(e){
                     $(this).prev('span').text( $('option:selected', this).text() );
                 });
