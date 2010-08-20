@@ -97,6 +97,7 @@ Example:
             var self = this;
 
             $('span.' + self.options.uniqueClassName + '.checkbox:not(.disabled), span.' + self.options.uniqueClassName + '.radio:not(.disabled)')
+                .die('mousedown mouseup')
                 .live('mousedown', function(e){
                     self.mousedown(e, this);
                 })
@@ -106,12 +107,14 @@ Example:
             ;
 
             $('span.' + self.options.uniqueClassName + '.select:not(.disabled) + select')
+                .die('change')
                 .live('change', function(e){
                     $(this).prev('span').text( $('option:selected', this).text() );
                 });
 
             // Handle label clicks
             $('input')
+                .die('change')
                 .live('change', function(e){
                     self.reset();
                 })
