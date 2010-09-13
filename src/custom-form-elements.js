@@ -13,6 +13,7 @@ Note:
     - The sprite order from top to bottom is: unchecked, unchecked-clicked, checked, checked-clicked.
     - 'checkboxHeight' and 'radioHeight' should all be set to 1/4th the sprite height.
     - 'selectWidth' is the width of the select box image.
+    - Remember that 'select' elements cannot be 'readonly'; they can be 'disabled' though.
 
 Example:
 
@@ -61,7 +62,7 @@ Example:
             var css = [
                 'input.', self.options.styled, ' { display: none; } ',
                 'select.', self.options.styled, ' { position: relative; width: ', self.options.selectWidth, 'px; opacity: 0; filter: alpha(opacity=0); z-index: 5; } ',
-                '.disabled { opacity: 0.5; filter: alpha(opacity=50); } '
+                '.disabled, .readonly { opacity: 0.5; filter: alpha(opacity=50); } '
             ];
 
             $('<style>' + css.join('') + '</style>').appendTo('head');
@@ -84,7 +85,8 @@ Example:
                     type = $(this).attr('type') === 'select-one' ? 'select' : $(this).attr('type'),
                     style = 'style = "background-position: 0 -' + self.options[ type + 'Height'] * ($(this).is(':checked') ? 2 : 0) + 'px;"',
                     disabled = $(this).is(":disabled") ? 'disabled': '',
-                    className = [self.options.uniqueClassName, type, disabled],
+                    readonly = $(this).attr("readonly") ? 'readonly': '',
+                    className = [self.options.uniqueClassName, type, disabled, readonly],
                     span = '<span id="' + $(this).attr('id') + '_cf" class="' + className.join(' ') + '" ' + style + '">' + selected + '</span>'
                 ;
 
@@ -96,7 +98,7 @@ Example:
         bind: function(){
             var self = this;
 
-            $('span.' + self.options.uniqueClassName + '.checkbox:not(.disabled), span.' + self.options.uniqueClassName + '.radio:not(.disabled)')
+            $('span.' + self.options.uniqueClassName + '.checkbox:not(.disabled, .readonly), span.' + self.options.uniqueClassName + '.radio:not(.disabled, .readonly)')
                 .die('mousedown mouseup')
                 .live('mousedown', function(e){
                     self.mousedown(e, this);
