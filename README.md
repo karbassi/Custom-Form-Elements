@@ -21,6 +21,7 @@ Note
   4. checked-mousedown
 * `checkboxHeight` and `radioHeight` should all be set to 1/4th the sprite height.
 * `selectWidth` is the width of the select box image.
+* Remember that `select` elements cannot be `readonly`; they can be `disabled` though.
 
 Example
 --------
