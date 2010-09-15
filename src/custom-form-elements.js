@@ -72,13 +72,15 @@ Example:
         },
 
         repaint: function(){
-            var self = this;
+            var self = this,
+                prev;
 
             $('input.' + self.options.styled + '[type=checkbox], input.' + self.options.styled + '[type=radio], select.' + self.options.styled).each(function(){
 
                 // stop already created ones.
-                if ($(this).prev().is('[class*=' + self.options.uniqueClassName + ']')) {
-                    return;
+                var prev = $(this).prev();
+                if (prev.is('[class*=' + self.options.uniqueClassName + ']')) {
+                    prev.remove();
                 }
 
                 var selected = $('option:selected', this).text(),
