@@ -5,7 +5,7 @@ http://github.com/karbassi/Custom-Form-Elements
 
 Written by Ali Karbassi (karbassi.com)
 
-Requires jQuery 1.4+
+Requires jQuery v1.4.2+
 
 Note:
     - Call once your document is loaded.
