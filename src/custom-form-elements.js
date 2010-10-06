@@ -1,10 +1,9 @@
 /*
-Custom Form Elements
+Custom Form Elements v0.5
 
 http://github.com/karbassi/Custom-Form-Elements
 
 Written by Ali Karbassi (karbassi.com)
-Original idea from Ryan Fait (ryanfait.com)
 
 Requires jQuery 1.4+
 
@@ -60,14 +59,13 @@ Example:
             self.options = $.extend({}, CustomFormElements.options, options || {});
 
             var css = [
-                'input.', self.options.styled, ' { display: none; } ',
-                'select.', self.options.styled, ' { position: relative; width: ', self.options.selectWidth, 'px; opacity: 0; filter: alpha(opacity=0); z-index: 5; } ',
-                '.disabled, .readonly { opacity: 0.5; filter: alpha(opacity=50); } '
+                'input.', self.options.styled, '{display:none;}',
+                'select.', self.options.styled, '{position:relative;width:', self.options.selectWidth, 'px;opacity:0;filter:alpha(opacity=0);z-index:5;}',
+                '.disabled,.readonly{opacity:0.5;filter:alpha(opacity=50);}'
             ];
 
             $('<style>' + css.join('') + '</style>').appendTo('head');
 
-            self.bind();
             self.repaint();
         },
 
@@ -75,7 +73,7 @@ Example:
             var self = this,
                 prev;
 
-            $('input.' + self.options.styled + '[type=checkbox], input.' + self.options.styled + '[type=radio], select.' + self.options.styled).each(function(){
+            $('input.' + self.options.styled + '[type=checkbox],input.' + self.options.styled + '[type=radio],select.' + self.options.styled).each(function(){
 
                 // stop already created ones.
                 var prev = $(this).prev();
@@ -83,24 +81,25 @@ Example:
                     prev.remove();
                 }
 
-                var selected = $('option:selected', this).text(),
-                    type = $(this).attr('type') === 'select-one' ? 'select' : $(this).attr('type'),
-                    style = 'style = "background-position: 0 -' + self.options[ type + 'Height'] * ($(this).is(':checked') ? 2 : 0) + 'px;"',
-                    disabled = $(this).is(":disabled") ? 'disabled': '',
-                    readonly = $(this).attr("readonly") ? 'readonly': '',
+                var selected = $(this).find('option:selected').text(),
+                    type = this.type === 'select-one' ? 'select' : this.type,
+                    style = 'style="background-position:0 -' + self.options[ type + 'Height'] * (this.checked ? 2 : 0) + 'px;"',
+                    disabled = this.disabled ? 'disabled': null,
+                    readonly = $(this).attr("readonly") ? 'readonly': null,
                     className = [self.options.uniqueClassName, type, disabled, readonly],
-                    span = '<span id="' + $(this).attr('id') + '_cf" class="' + className.join(' ') + '" ' + style + '">' + selected + '</span>'
+                    span = '<span id="' + this.id + '_cf" class="' + className.join(' ') + '" ' + style + '>' + selected + '</span>'
                 ;
 
                 $(span).insertBefore(this);
-
             });
+
+            self.bind();
         },
 
         bind: function(){
             var self = this;
 
-            $('span.' + self.options.uniqueClassName + '.checkbox:not(.disabled, .readonly), span.' + self.options.uniqueClassName + '.radio:not(.disabled, .readonly)')
+            $('span.' + self.options.uniqueClassName + '.checkbox:not(.disabled,.readonly),span.' + self.options.uniqueClassName + '.radio:not(.disabled,.readonly)')
                 .die('mousedown mouseup')
                 .live('mousedown', function(e){
                     self.mousedown(e, this);
@@ -110,50 +109,70 @@ Example:
                 })
             ;
 
-            $('span.' + self.options.uniqueClassName + '.select:not(.disabled) + select')
-                .die('change')
-                .live('change', function(e){
-                    $(this).prev('span').text( $('option:selected', this).text() );
-                });
+            var query = 'span.' + self.options.uniqueClassName + '.select:not(.disabled)+select';
+
+            $(query).each(function(){
+                $(this)
+                    .parent()
+                    .undelegate(query, 'change')
+                    .delegate(query, 'change', function(){
+                        $(this).prev('span').text( $('option:selected', this).text() );
+                    });
+            });
 
             // Handle label clicks
-            $('input')
-                .die('change')
-                .live('change', function(e){
-                    self.reset();
-                })
-            ;
+            query = 'input.' + self.options.styled;
+
+            $(query).each(function(){
+
+                if ($('span#' + this.id + '_cf.disabled').length) {
+                    return;
+                }
+
+                $(this)
+                    .parent()
+                    .undelegate(query, 'change')
+                    .delegate(query, 'change', function(){
+                        self.reset();
+                });
+
+                if ($.browser.msie) {
+                    $('label[for=' + this.id + ']').bind('click', function(){
+                        $('input[id=' + this.htmlFor + ']').attr('checked', 'checked');
+                        self.reset();
+                    });
+                }
+            });
         },
 
-        reset: function(e, el){
+        reset: function(){
             var self = this;
-
-            $('input.styled').each(function(k, v){
-                var offset = self.options[ $(this).attr('type') + 'Height'] * ($(this).is(':checked') ? 2 : 0);
-                $('#' + $(this).attr('id') + '_cf').css({'background-position': "0 -" + offset + 'px' });
+            $('input.' + self.options.styled).each(function(k, v){
+                var offset = self.options[ this.type + 'Height'] * (this.checked ? 2 : 0);
+                $('#' + this.id + '_cf').css({'background-position': "0 -" + offset + 'px' });
             });
         },
 
         mousedown: function(e, el){
             var self = this,
-                next = $(el).next('input'),
-                offset = self.options[ next.attr('type') + 'Height'] * (next.is(':checked') ? 3 : 1);
+                next = $(el).next('input').get(0),
+                offset = self.options[ next.type + 'Height'] * (next.checked ? 3 : 1);
 
             $(el).css({'background-position': "0 -" + offset + 'px' });
         },
 
         mouseup: function(e, el){
             var self = this,
-                next = $(el).next('input');
-                offset = self.options[ next.attr('type') + 'Height'] * (next.is(':checked') && next.attr('type') === 'checkbox' ? 0 : 2);
+                next = $(el).next('input').get(0);
+                offset = self.options[ next.type + 'Height'] * (next.checked && next.type === 'checkbox' ? 0 : 2);
 
             $(el).css({'background-position': "0 -" + offset + 'px' });
 
-            $('input[type=radio][name=' + next.attr('name') + ']:not(#' + next.attr('id') + ')').each(function(){
+            $('input[type=radio][name=' + next.name + ']').not('#' + next.id).each(function(){
                 $(this).prev('span').css({'background-position': '0 0' });
             });
 
-            next.attr('checked', !next.is(':checked'));
+            next.checked = !next.checked;
         }
 
     };
