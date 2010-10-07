@@ -113,7 +113,7 @@ Example:
                     .parent()
                     .undelegate(query, 'change')
                     .delegate(query, 'change', function(){
-                        $(this).prev('span').text($('option:selected', this).text());
+                        $(this).prev('span').html($(this).find('option:selected').text().replace(/\s/g, '&nbsp;'));
                     });
             });
 
