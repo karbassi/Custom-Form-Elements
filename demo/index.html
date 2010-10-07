@@ -11,7 +11,7 @@
         .select {
             display: inline-block;
             cursor: pointer;
-            background-position: 0px 0px;
+            background-position: 0 0;
             background-color: transparent;
             background-repeat: no-repeat;
             background-attachment: scroll;
@@ -19,27 +19,26 @@
 
         .radio {
             background-image: url(radios.png);
-            vertical-align: middle;
             width: 12px;
             height: 11px;
         }
 
         .checkbox {
             background-image: url(checkbox.png);
-            height: 12px;
             padding: 0;
-            width :12px;
+            width: 12px;
+            height: 12px;
         }
 
         .select {
             background-image: url(select-short.png);
             color: #8A7967;
             font: 10px/21px arial,sans-serif;
-            height: 21px;
             overflow: hidden;
-            padding: 0 24px 0 11px;
             position: absolute;
+            padding: 0 24px 0 11px;
             width: 126px;
+            height: 21px;
         }
 
         div {
@@ -49,15 +48,20 @@
     </style>
     <script>
         jQuery(document).ready(function($) {
-            var cf = new CustomFormElements();
+            console.time('text');
+                var cf = new CustomFormElements();
+            console.timeEnd('text');
+            console.profile('test');
+                cf.repaint();
+            console.profileEnd();
         });
     </script>
 </head>
 <body>
     <div>
         <select class="styled">
-            <option>One</option>
-            <option selected>Two</option>
+            <option selected>One</option>
+            <option>Two</option>
         </select>
     </div>
 

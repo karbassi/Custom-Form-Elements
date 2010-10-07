@@ -27,6 +27,47 @@ Note
 Example
 --------
 
+CSS
+===
+    .radio,
+    .checkbox,
+    .select {
+        display: inline-block;
+        cursor: pointer;
+        background-position: 0 0;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+    }
+
+    .radio {
+        background-image: url(radios.png);
+        width: 12px;
+        height: 11px;
+    }
+
+    .checkbox {
+        background-image: url(checkbox.png);
+        padding: 0;
+        width: 12px;
+        height: 12px;
+    }
+
+    .select {
+        background-image: url(select-short.png);
+        color: #8A7967;
+        font: 10px/21px arial,sans-serif;
+        overflow: hidden;
+        position: absolute;
+        padding: 0 24px 0 11px;
+        width: 126px;
+        height: 21px;
+    }
+
+
+Javascript
+==========
+
     jQuery(document).ready(function($) {
 
         // Extremely minimum version:
