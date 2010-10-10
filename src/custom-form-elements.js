@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.6
+Custom Form Elements v0.7
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -113,7 +113,14 @@ Example:
                     .parent()
                     .undelegate(query, 'change')
                     .delegate(query, 'change', function(){
-                        $(this).prev('span').html($(this).find('option:selected').text().replace(/\s/g, '&nbsp;'));
+                        $(this)
+                            .prev('span')
+                            .html(
+                                $(this)
+                                .find('option:selected')
+                                .text()
+                                .replace(/\s/g, '&nbsp;')
+                            );
                     });
             });
 
