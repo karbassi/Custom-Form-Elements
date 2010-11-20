@@ -158,6 +158,8 @@ Example:
         },
 
         mousedown: function(e, el) {
+            if (e.button !== 0) { return; } // Only respond to left mouse clicks
+
             var self = this,
                 next = $(el).next('input')[0],
                 offset = self.options[next.type + h] * (next.checked ? 3 : 1);
@@ -166,6 +168,8 @@ Example:
         },
 
         mouseup: function(e, el) {
+            if (e.button !== 0) { return; } // Only respond to left mouse clicks
+
             var self = this,
                 next = $(el).next('input')[0];
 
