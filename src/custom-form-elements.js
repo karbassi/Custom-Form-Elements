@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.8
+Custom Form Elements v0.9
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -13,6 +13,7 @@ Note:
     - 'checkboxHeight' and 'radioHeight' should all be set to 1/4th the sprite height.
     - 'selectWidth' is the width of the select box image.
     - Remember that 'select' elements cannot be 'readonly'; they can be 'disabled' though.
+    - The 'input' file should not be wrapped with the 'label' tag.
 
 Example:
 
@@ -69,15 +70,13 @@ Example:
         },
 
         repaint: function(){
-            var self = this,
-                prev;
+            var self = this;
 
             $('input.' + self.options.styled + '[type=checkbox],input.' + self.options.styled + '[type=radio],select.' + self.options.styled).each(function(){
 
-                // stop already created ones.
-                var prev = $(this).prev();
-                if (prev.is('[class*=' + self.options.uniqueClassName + ']')) {
-                    prev.remove();
+                var existing = $('#' + this.id + '_cf.' + self.options.uniqueClassName);
+                if (existing.length > 0) {
+                    existing.remove();
                 }
 
                 var selected = $(this).find('option:selected').text(),
@@ -107,7 +106,7 @@ Example:
                 });
 
             var query = 'span.' + self.options.uniqueClassName + '.select:not(.' + d + ')+select';
-
+            
             $(query).each(function(){
                 $(this)
                     .parent()
@@ -126,7 +125,6 @@ Example:
 
             // Handle label clicks
             query = 'input.' + self.options.styled;
-
             $(query).each(function(){
 
                 if ($('span#' + this.id + '_cf.' + d).length) {
@@ -136,7 +134,7 @@ Example:
                 $(this)
                     .parent()
                     .undelegate(query, 'change')
-                    .delegate(query, 'change', function(){
+                    .delegate(query, 'change', function(e){
                         self.reset();
                     });
 
@@ -151,7 +149,6 @@ Example:
 
         reset: function(){
             var self = this;
-
             $('input.' + self.options.styled).each(function(k, v) {
                 $('#' + this.id + '_cf')[0].style[bgp] = !this.checked ? '' : "0 -" + self.options[this.type + h] * 2 + 'px';
             });
@@ -159,10 +156,10 @@ Example:
 
         mousedown: function(e, el) {
             if (e.button !== 0) { return; } // Only respond to left mouse clicks
-
+            
             var self = this,
-                next = $(el).next('input')[0],
-                offset = self.options[next.type + h] * (next.checked ? 3 : 1);
+                input = $('#' + el.id.split('_cf').shift())[0],
+                offset = self.options[input.type + h] * (input.checked ? 3 : 1);
 
             el.style[bgp] = "0 -" + offset + 'px';
         },
@@ -171,15 +168,16 @@ Example:
             if (e.button !== 0) { return; } // Only respond to left mouse clicks
 
             var self = this,
-                next = $(el).next('input')[0];
+                input = $('#' + el.id.split('_cf').shift())[0];
 
-            el.style[bgp] = next.checked && next.type === 'checkbox' ? '' : "0 -" + self.options[next.type + h] * 2 + 'px';
+            el.style[bgp] = input.checked && input.type === 'checkbox' ? '' : "0 -" + self.options[input.type + h] * 2 + 'px';
 
-            $('input[type=radio][name=' + next.name + ']').not('#' + next.id).each(function(){
-                $(this).prev('span')[0].style[bgp] = '';
+            $('input[type=radio][name=' + input.name + ']').not('#' + input.id).each(function(){
+                $('#' + this.id + '_cf')[0].style[bgp] = '';
             });
 
-            next.checked = !next.checked;
+            input.checked = !input.checked;
+            $(input).trigger('change');
         }
 
     };
