@@ -23,6 +23,7 @@ Note
 * `selectWidth` is the width of the select box image.
 * Remember that `select` elements cannot be `readonly`; they can be `disabled` though.
 * As of jQuery 1.4.2, there is an [open bug](http://dev.jquery.com/ticket/7071) pertaining to jQuery, VML, and IE. Version 0.5+ of this script has a work around.
+* The `input` file should not be wrapped with the `label` tag.
 
 Example
 --------
