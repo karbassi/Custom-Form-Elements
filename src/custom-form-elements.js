@@ -106,7 +106,7 @@ Example:
                 });
 
             var query = 'span.' + self.options.uniqueClassName + '.select:not(.' + d + ')+select';
-            
+
             $(query).each(function(){
                 $(this)
                     .parent()
@@ -156,7 +156,7 @@ Example:
 
         mousedown: function(e, el) {
             if (e.button !== 0) { return; } // Only respond to left mouse clicks
-            
+
             var self = this,
                 input = $('#' + el.id.split('_cf').shift())[0],
                 offset = self.options[input.type + h] * (input.checked ? 3 : 1);
