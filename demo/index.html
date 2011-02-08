@@ -44,7 +44,6 @@
         div {
             margin: 2em;
         }
-
     </style>
     <script>
         jQuery(document).ready(function($) {
@@ -54,45 +53,53 @@
 </head>
 <body>
     <div>
-        <select class="styled">
+        <h3>Select Box</h3>
+        <select id="select1" class="styled">
             <option selected>One</option>
             <option>Two</option>
         </select>
     </div>
 
     <div>
-        <select class="styled" disabled>
+        <h3>Select Box Disabled</h3>
+        <select id="select2" class="styled" disabled>
             <option>One</option>
             <option selected>Two</option>
         </select>
     </div>
 
-    <div>
+    <div>  
+        <h3>Default Checkbox</h3>
         <label for="checkbox1">Checkbox 1</label>
         <input class="styled" type="checkbox" id="checkbox1" name="checkbox1" value="checkbox" />
     </div>
 
     <div>
+        <h3>Checkbox Checked by default</h3>
         <label for="checkbox2">Checkbox 2</label>
         <input class="styled" type="checkbox" id="checkbox2" name="checkbox2" value="checkbox" checked="checked" />
     </div>
 
     <div>
+        <h3>Label after Checkbox</h3>
+        <input class="styled" type="checkbox" id="checkbox3" name="checkbox3" value="checkbox" />
         <label for="checkbox3">Checkbox 3</label>
-        <input class="styled" type="checkbox" id="checkbox3" name="checkbox3" value="checkbox" disabled="disabled" />
     </div>
 
     <div>
+        <h3>Default Radio Button</h3>
         <label for="radio1">Radio 1</label>
         <input class="styled" type="radio" id="radio1" name="radio1" value="radio" />
     </div>
 
     <div>
+        <h3>Radio Button Disabled</h3>
         <label for="radio2">Radio 2</label>
         <input class="styled" type="radio" id="radio2" name="radio2" value="radio" disabled="disabled" />
     </div>
 
     <div>
+        <h3>Default Radio Group</h3>
         <label for="radiog1">Radio 1</label>
         <input class="styled" type="radio" id="radiog1" name="radiog1" value="radio" />
 
@@ -107,6 +114,7 @@
     </div>
 
     <div>
+        <h3>Radio Group with Radio 2 Disabled</h3>
         <label for="radiog5">Radio 1</label>
         <input class="styled" type="radio" id="radiog5" name="radiog2" value="radio" />
 
