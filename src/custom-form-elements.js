@@ -87,7 +87,7 @@ Example:
                     className = [self.options.uniqueClassName, type, disabled, readonly],
                     span = '<span id="' + this.id + '_cf" class="' + className.join(' ').replace(/^(\s|\u00A0)+|(\s|\u00A0)+$/g, '') + '"' + (type !== 'select' ? ' ' + style + ' ' : '') + '>' + selected + '</span>';
 
-                $(span).insertBefore(this);
+                $(this).before(span);
             });
 
             self.bind();
