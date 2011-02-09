@@ -173,6 +173,11 @@ Example:
 
             el.style[bgp] = input.checked && input.type === 'checkbox' ? '' : "0 -" + self.options[input.type + h] * 2 + 'px';
 
+            if (input.type == 'radio' && input.checked === true) {
+                // Prevent unselecting radio option
+                return;
+            }
+            
             $('input[type=radio][name=' + input.name + ']').not('#' + input.id).each(function(){
                 $('#' + this.id + '_cf')[0].style[bgp] = '';
             });
