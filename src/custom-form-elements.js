@@ -155,7 +155,7 @@ Example:
         },
 
         mousedown: function(e, el) {
-            if (e.button !== 0) { return; } // Only respond to left mouse clicks
+            if (e.which !== 1) { return; } // Only respond to left mouse clicks
 
             var self = this,
                 input = $('#' + el.id.split('_cf').shift())[0],
@@ -165,7 +165,7 @@ Example:
         },
 
         mouseup: function(e, el) {
-            if (e.button !== 0) { return; } // Only respond to left mouse clicks
+            if (e.which !== 1) { return; } // Only respond to left mouse clicks
 
             var self = this,
                 input = $('#' + el.id.split('_cf').shift())[0];
