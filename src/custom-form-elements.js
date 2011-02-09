@@ -140,8 +140,9 @@ Example:
 
                 if ($.browser.msie) {
                     $('label[for=' + this.id + ']').bind('click', function(){
-                        $('input[id=' + this.htmlFor + ']')[0].checked = true;
-                        self.reset();
+                        var mouseup = jQuery.Event("mouseup");
+                        mouseup.which = 1;
+                        $('span#' + $(this).attr('for') + '_cf').trigger(mouseup);
                     });
                 }
             });
