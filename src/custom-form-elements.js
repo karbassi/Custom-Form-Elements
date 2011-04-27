@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.10
+Custom Form Elements v0.11b
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -27,7 +27,8 @@ Example:
         var cf = new CustomFormElements({
             checkboxHeight: 12,
             radioHeight: 11,
-            selectWidth: 161
+            selectWidth: 161,
+            fileWidth: 161
         });
 
         // All options
@@ -36,7 +37,8 @@ Example:
             uniqueClassName: 'customFormElement',
             checkboxHeight: 12,
             radioHeight: 11,
-            selectWidth: 161
+            selectWidth: 161,
+            fileWidth: 161
         });
 
         // If you need to reinitialize dynamically added form elements:
@@ -54,25 +56,24 @@ Example:
 
     CustomFormElements.prototype = {
         init: function(options) {
-            var self = this;
-
             // Merge options
-            self.options = $.extend({}, CustomFormElements.options, options || {});
-            var css = [
-                'input.', self.options.styled, '{display:none;}',
-                'select.', self.options.styled, '{position:relative;width:', self.options.selectWidth, 'px;opacity:0;filter:alpha(opacity=0);z-index:5;}',
-                '.' + d + ',.' + r + '{opacity:0.5;filter:alpha(opacity=50);}'
-            ];
+            this.options = $.extend({}, CustomFormElements.options, options || {});
+            var css = '<style>'
+                    + 'input.' + this.options.styled + '{display:none;}'
+                    + 'select.' + this.options.styled + '{position:relative;width:' + this.options.selectWidth + 'px;opacity:0;filter:alpha(opacity=0);z-index:5;}'
+                    + 'input.' + this.options.styled + '[type=file]{display:block;position:relative;width:' + this.options.fileWidth + 'px;opacity:0;filter:alpha(opacity=0);z-index:5;}'
+                    + '.disabled,.readonly{opacity:0.5;filter:alpha(opacity=50);}'
+                    + '</style>'
+            ;
 
-            $('<style>' + css.join('') + '</style>').appendTo('head');
+            $(css).appendTo('head');
 
-            self.repaint();
+            this.repaint();
         },
 
         repaint: function(){
             var self = this;
-
-            $('input.' + self.options.styled + '[type=checkbox],input.' + self.options.styled + '[type=radio],select.' + self.options.styled).each(function(){
+            $('input.' + self.options.styled + '[type=checkbox],input.' + self.options.styled + '[type=radio],input.' + self.options.styled + '[type=file],select.' + self.options.styled).each(function(){
 
                 var existing = $('#' + this.id + '_cf.' + self.options.uniqueClassName);
                 if (existing.length > 0) {
@@ -81,11 +82,12 @@ Example:
 
                 var selected = $(this).find('option:selected').text(),
                     type = this.type === 'select-one' ? 'select' : this.type,
-                    style = 'style="background-position:0 -' + self.options[type + h] * (this.checked ? 2 : 0) + 'px;"',
-                    disabled = this.disabled ? d : null,
-                    readonly = $(this).attr(r) ? r : null,
-                    className = [self.options.uniqueClassName, type, disabled, readonly],
-                    span = '<span id="' + this.id + '_cf" class="' + className.join(' ').replace(/^(\s|\u00A0)+|(\s|\u00A0)+$/g, '') + '"' + (type !== 'select' ? ' ' + style + ' ' : '') + '>' + selected + '</span>';
+                    isStatic = this.type === 'select-one' || this.type === 'file',
+                    style = !isStatic ? ' style="background-position:0 -' + self.options[this.type + 'Height'] * (this.checked ? 2 : 0) + 'px;" ' : '',
+                    isDisabled = this.disabled ? 'disabled' : '',
+                    isReadonly = this.getAttribute('readonly') ? 'readonly' : '',
+                    className = (self.options.uniqueClassName + ' ' + type + ' ' + isDisabled + ' ' + isReadonly + ' ').replace(/^(\s|\u00A0)+|(\s|\u00A0)+$/g, ''),
+                    span = '<span id="' + this.id + '_cf" class="' + className + '"' + style + '>' + selected + '</span>';
 
                 $(this).before(span);
             });
@@ -96,7 +98,7 @@ Example:
         bind: function(){
             var self = this;
 
-            $('span.' + self.options.uniqueClassName + '.checkbox:not(.' + d + ',.' + r + '),span.' + self.options.uniqueClassName + '.radio:not(.' + d + ',.' + r + ')')
+            $('span.' + self.options.uniqueClassName + '.checkbox:not(.disabled,.readonly),span.' + self.options.uniqueClassName + '.radio:not(.disabled,.readonly)')
                 .die('mousedown mouseup')
                 .live('mousedown', function(e) {
                     self.mousedown(e, this);
@@ -105,7 +107,7 @@ Example:
                     self.mouseup(e, this);
                 });
 
-            var query = 'span.' + self.options.uniqueClassName + '.select:not(.' + d + ')+select';
+            var query = 'span.' + self.options.uniqueClassName + '.select:not(.disabled)+select';
 
             $(query).each(function(){
                 $(this)
@@ -127,7 +129,7 @@ Example:
             query = 'input.' + self.options.styled;
             $(query).each(function(){
 
-                if ($('span#' + this.id + '_cf.' + d).length) {
+                if ($('span#' + this.id + '_cf.disabled').length) {
                     return;
                 }
 
@@ -140,7 +142,7 @@ Example:
 
                 if ($.browser.msie) {
                     $('label[for=' + this.id + ']').bind('click', function(){
-                        var mouseup = jQuery.Event("mouseup");
+                        var mouseup = jQuery.Event('mouseup');
                         mouseup.which = 1;
                         $('span#' + $(this).attr('for') + '_cf').trigger(mouseup);
                     });
@@ -151,7 +153,7 @@ Example:
         reset: function(){
             var self = this;
             $('input.' + self.options.styled).each(function(k, v) {
-                $('#' + this.id + '_cf')[0].style[bgp] = !this.checked ? '' : "0 -" + self.options[this.type + h] * 2 + 'px';
+                $('#' + this.id + '_cf')[0].style['backgroundPosition'] = !this.checked ? '' : '0 -' + self.options[this.type + 'Height'] * 2 + 'px';
             });
         },
 
@@ -160,9 +162,9 @@ Example:
 
             var self = this,
                 input = $('#' + el.id.split('_cf').shift())[0],
-                offset = self.options[input.type + h] * (input.checked ? 3 : 1);
+                offset = self.options[input.type + 'Height'] * (input.checked ? 3 : 1);
 
-            el.style[bgp] = "0 -" + offset + 'px';
+            el.style['backgroundPosition'] = '0 -' + offset + 'px';
         },
 
         mouseup: function(e, el) {
@@ -171,15 +173,15 @@ Example:
             var self = this,
                 input = $('#' + el.id.split('_cf').shift())[0];
 
-            el.style[bgp] = input.checked && input.type === 'checkbox' ? '' : "0 -" + self.options[input.type + h] * 2 + 'px';
+            el.style['backgroundPosition'] = input.checked && input.type === 'checkbox' ? '' : '0 -' + self.options[input.type + 'Height'] * 2 + 'px';
 
             if (input.type == 'radio' && input.checked === true) {
                 // Prevent unselecting radio option
                 return;
             }
-            
+
             $('input[type=radio][name=' + input.name + ']').not('#' + input.id).each(function(){
-                $('#' + this.id + '_cf')[0].style[bgp] = '';
+                $('#' + this.id + '_cf')[0].style['backgroundPosition'] = '';
             });
 
             input.checked = !input.checked;
@@ -190,18 +192,13 @@ Example:
 
     // Default CustomFormElements options
     CustomFormElements.options = {
-        'styled': 'styled',
-        'uniqueClassName': 'customFormElement',
-        'checkboxHeight': 12,
-        'radioHeight': 11,
-        'selectWidth': 161
+        styled: 'styled',
+        uniqueClassName: 'customFormElement',
+        checkboxHeight: 12,
+        radioHeight: 11,
+        selectWidth: 161,
+        fileWidth: 161
     };
-
-    // Save some space
-    var bgp = 'backgroundPosition',
-        d = 'disabled',
-        r = 'readonly',
-        h = 'Height';
 
     // Expose CustomFormElements to the global object
     window.CustomFormElements = CustomFormElements;

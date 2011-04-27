@@ -8,7 +8,8 @@
     <style>
         .radio,
         .checkbox,
-        .select {
+        .select,
+        .file {
             display: inline-block;
             cursor: pointer;
             background-position: 0 0;
@@ -30,7 +31,8 @@
             padding: 0;
         }
 
-        .select {
+        .select,
+        .file {
             color: #8A7967;
             font: 10px/21px arial,sans-serif;
             overflow: hidden;
@@ -42,6 +44,10 @@
 
         .select {
             background-image: url(select.png);
+        }
+
+        .file {
+            background-image: url(file.png);
         }
 
         div {
@@ -69,6 +75,11 @@
             <option>One</option>
             <option selected>Two</option>
         </select>
+    </div>
+
+    <div>
+        <h3>File Upload</h3>
+        <input class="styled" type="file" id="file1" name="file1" value="" />
     </div>
 
     <div>
