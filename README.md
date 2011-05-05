@@ -9,11 +9,17 @@ This project lives on GitHub: [http://github.com/karbassi/Custom-Form-Elements](
 
 This whole project is licensed under the MIT License: [http://opensource.org/licenses/mit-license.php](http://opensource.org/licenses/mit-license.php)
 
+Requirements
+-------------
+
+* Requires [jQuery 1.4.2+](http://jquery.com)
+* All `form` elements require `id`s.
+
 Note
 -----
 
-* Requires [jQuery 1.4.2+](http://jquery.com)
-* Call once your document is loaded.
+* Call once your document is loaded. If you are dynamically loading content, use the `repaint` function.
+* The `input` file should not be wrapped with the `label` tag.
 * The sprite order from top to bottom is:
   1. unchecked
   2. unchecked-mousedown
@@ -23,7 +29,7 @@ Note
 * `selectWidth` is the width of the select box image.
 * Remember that `select` elements cannot be `readonly`; they can be `disabled` though.
 * As of jQuery 1.4.2, there is an [open bug](http://dev.jquery.com/ticket/7071) pertaining to jQuery, VML, and IE. Version 0.5+ of this script has a work around.
-* The `input` file should not be wrapped with the `label` tag.
+
 
 Example
 --------
