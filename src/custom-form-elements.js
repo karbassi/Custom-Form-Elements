@@ -140,7 +140,7 @@ Example:
                         self.reset();
                     });
 
-                if ($.browser.msie) {
+                if ($.browser.msie && $.browser.version < 9) {
                     $('label[for=' + this.id + ']').bind('click', function(){
                         var mouseup = jQuery.Event('mouseup');
                         mouseup.which = 1;
