@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.10
+Custom Form Elements v0.11
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -14,6 +14,7 @@ Note:
     - 'selectWidth' is the width of the select box image.
     - Remember that 'select' elements cannot be 'readonly'; they can be 'disabled' though.
     - The 'input' file should not be wrapped with the 'label' tag.
+    - Works on mobile devices. Tested on iPhone and iPad.
 
 Example:
 
@@ -97,11 +98,11 @@ Example:
             var self = this;
 
             $('span.' + self.options.uniqueClassName + '.checkbox:not(.' + d + ',.' + r + '),span.' + self.options.uniqueClassName + '.radio:not(.' + d + ',.' + r + ')')
-                .die('mousedown mouseup')
-                .live('mousedown', function(e) {
+                .die('mousedown mouseup touchstart touchend')
+                .live('mousedown touchstart', function(e) {
                     self.mousedown(e, this);
                 })
-                .live('mouseup', function(e) {
+                .live('mouseup touchend', function(e) {
                     self.mouseup(e, this);
                 });
 
@@ -156,7 +157,7 @@ Example:
         },
 
         mousedown: function(e, el) {
-            if (e.which !== 1) { return; } // Only respond to left mouse clicks
+            if (e.which !== 1 && e.which !== 0) { return; } // Only respond to left mouse clicks and touch event.
 
             var self = this,
                 input = $('#' + el.id.split('_cf').shift())[0],
@@ -166,7 +167,7 @@ Example:
         },
 
         mouseup: function(e, el) {
-            if (e.which !== 1) { return; } // Only respond to left mouse clicks
+            if (e.which !== 1 && e.which !== 0) { return; } // Only respond to left mouse clicks and touch event.
 
             var self = this,
                 input = $('#' + el.id.split('_cf').shift())[0];
@@ -177,7 +178,7 @@ Example:
                 // Prevent unselecting radio option
                 return;
             }
-            
+
             $('input[type=radio][name=' + input.name + ']').not('#' + input.id).each(function(){
                 $('#' + this.id + '_cf')[0].style[bgp] = '';
             });
