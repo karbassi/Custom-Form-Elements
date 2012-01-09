@@ -1,4 +1,4 @@
-Custom Form Elements
+Custom Form Elements ![Project status](http://stillmaintained.com/karbassi/Custom-Form-Elements.png)
 ====================
 
 A lightweight custom form styler for radio, checkbox and select elements. Radio and Checkboxes have four states rather than just two.
