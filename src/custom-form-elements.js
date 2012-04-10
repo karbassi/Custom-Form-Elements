@@ -1,17 +1,19 @@
 /*
-Custom Form Elements v0.11b
+Custom Form Elements v0.12b
 
 http://github.com/karbassi/Custom-Form-Elements
 
 Written by Ali Karbassi (karbassi.com)
 
-Requires jQuery v1.4.2+
+Requires jQuery v1.7+
 
 Note:
     - Call once your document is loaded.
-    - The sprite order from top to bottom is: unchecked, unchecked-clicked, checked, checked-clicked.
-    - 'checkboxHeight' and 'radioHeight' should all be set to 1/4th the sprite height.
-    - 'selectWidth' is the width of the select box image.
+    - Custom `span` elements have four states:
+      - state-0: unchecked
+      - state-1: unchecked-mousedown
+      - state-2: checked
+      - state-3: checked-mousedown
     - Remember that 'select' elements cannot be 'readonly'; they can be 'disabled' though.
     - The 'input' file should not be wrapped with the 'label' tag.
 
@@ -20,25 +22,12 @@ Example:
     jQuery(document).ready(function($) {
 
         // Extremely minimum version:
-        // Default settings apply. All input/select tags with a class of 'styled' are affected.
+        // Default settings apply. All input/select tags with a class of 'cfe-styled' are affected.
         var cf = new CustomFormElements();
-
-        // Minimum version:
-        var cf = new CustomFormElements({
-            checkboxHeight: 12,
-            radioHeight: 11,
-            selectWidth: 161,
-            fileWidth: 161
-        });
 
         // All options
         var cf = new CustomFormElements({
-            styled: 'styled',
-            uniqueClassName: 'customFormElement',
-            checkboxHeight: 12,
-            radioHeight: 11,
-            selectWidth: 161,
-            fileWidth: 161
+            class: 'cfe-styled',
         });
 
         // If you need to reinitialize dynamically added form elements:
@@ -58,148 +47,253 @@ Example:
         init: function(options) {
             // Merge options
             this.options = $.extend({}, CustomFormElements.options, options || {});
-            var css = '<style>'
-                    + 'input.' + this.options.styled + '{display:none;}'
-                    + 'select.' + this.options.styled + '{position:relative;width:' + this.options.selectWidth + 'px;opacity:0;filter:alpha(opacity=0);z-index:5;}'
-                    + 'input.' + this.options.styled + '[type=file]{display:block;position:relative;width:' + this.options.fileWidth + 'px;opacity:0;filter:alpha(opacity=0);z-index:5;}'
-                    + '.disabled,.readonly{opacity:0.5;filter:alpha(opacity=50);}'
-                    + '</style>'
-            ;
 
-            $(css).appendTo('head');
+            // Create CSS
+            var head = document.getElementsByTagName('head')[0];
+            var style = document.createElement('style');
+            style.type = 'text/css';
+
+            var rules = document.createTextNode(
+                'input.' + this.options.cssClass + ' { display: none; } ' +
+                'select.' + this.options.cssClass + ', input.' + this.options.cssClass + '[type=file] { position: relative; display: block; opacity: 0; -ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=0); filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0); filter:alpha(opacity=0); z-index: 5; } '
+                );
+
+            if (style.styleSheet) {
+                style.styleSheet.cssText = rules.nodeValue;
+            } else {
+                style.appendChild( rules );
+            }
+
+            head.appendChild( style );
 
             this.repaint();
         },
 
+
         repaint: function(){
             var self = this;
-            $('input.' + self.options.styled + '[type=checkbox],input.' + self.options.styled + '[type=radio],input.' + self.options.styled + '[type=file],select.' + self.options.styled).each(function(){
 
-                var existing = $('#' + this.id + '_cf.' + self.options.uniqueClassName);
+            $('.' + self.options.cssClass + '[type=checkbox], ' +
+              '.' + self.options.cssClass + '[type=radio], ' +
+              '.' + self.options.cssClass + '[type=file], ' +
+              '.' + self.options.cssClass
+            ).each(function(){
+
+                var existing = $('#cfe-' + this.id + '.cfe');
                 if (existing.length > 0) {
                     existing.remove();
                 }
 
-                var selected = $(this).find('option:selected').text(),
-                    type = this.type === 'select-one' ? 'select' : this.type,
-                    isStatic = this.type === 'select-one' || this.type === 'file',
-                    style = !isStatic ? ' style="background-position:0 -' + self.options[this.type + 'Height'] * (this.checked ? 2 : 0) + 'px;" ' : '',
-                    isDisabled = this.disabled ? 'disabled' : '',
-                    isReadonly = this.getAttribute('readonly') ? 'readonly' : '',
-                    className = (self.options.uniqueClassName + ' ' + type + ' ' + isDisabled + ' ' + isReadonly + ' ').replace(/^(\s|\u00A0)+|(\s|\u00A0)+$/g, ''),
-                    span = '<span id="' + this.id + '_cf" class="' + className + '"' + style + '>' + selected + '</span>';
+                // Class Names for the ement
+                var className =
+                    [
+                        // Plugins unique name
+                        'cfe',
 
-                $(this).before(span);
+                        // Form Element type
+                        'cfe-' + (this.type === 'select-one' ? 'select' : this.type),
+
+                        // If the element is checked or not
+                        this.type !== 'select-one' && this.type !== 'file' ?
+                            'cfe-' + (this.checked ? 'state-2' : 'state-0'):
+                            '',
+
+                        // If the element is disabled or not
+                        this.disabled ? 'cfe-disabled' : '',
+
+                        // If the element is readonly or not
+                        this.getAttribute('readonly') ? 'cfe-readonly' : ''
+                    ]
+
+                    .sort()
+
+                    // Combine array into a string with seperator of space.
+                    .join(' ')
+
+                    // Trim
+                    .trim()
+                ;
+
+                // Create the span element
+                var span = document.createElement('span');
+                span.id = 'cfe-' + this.id;
+                span.className = className;
+                span.innerHTML = $(this).find('option:selected').text();
+
+                // Insert before the HTML element
+                this.parentNode.insertBefore(span, this);
+
+                // Set label class
+                $('label[for=' + this.id + ']').addClass('cfe');
+
             });
 
-            self.bind();
+            this.bind();
         },
 
         bind: function(){
             var self = this;
 
-            $('span.' + self.options.uniqueClassName + '.checkbox:not(.disabled,.readonly),span.' + self.options.uniqueClassName + '.radio:not(.disabled,.readonly)')
-                .die('mousedown mouseup')
-                .live('mousedown', function(e) {
-                    self.mousedown(e, this);
+            // Radio and Checkboxes
+            $('.cfe-radio, .cfe-checkbox')
+                //
+                .not('.cfe-disabled, .cfe-readonly')
+
+                // Remove old binds
+                .off('.cfe')
+
+                // New binds
+                .on('mousedown.cfe', function(e) {
+                    self.mousedown(this, e);
                 })
-                .live('mouseup', function(e) {
-                    self.mouseup(e, this);
-                });
+                .on('mouseup.cfe', function(e) {
+                    self.mouseup(this, e);
+                })
+            ;
 
-            var query = 'span.' + self.options.uniqueClassName + '.select:not(.disabled)+select';
+            // Select boxes
+            $('select.' + self.options.cssClass +
+              ', input.' + self.options.cssClass + '[type=file]')
 
-            $(query).each(function(){
-                $(this)
-                    .parent()
-                    .undelegate(query, 'change')
-                    .delegate(query, 'change', function(){
-                        $(this)
-                            .prev('span')
-                            .html(
-                                $(this)
-                                .find('option:selected')
-                                .text()
-                                .replace(/\s/g, '&nbsp;')
-                            );
-                    });
-            });
+                // Remove old binds
+                .off('.cfe')
+
+                // New binds
+                .on('change.cfe', self.change)
+            ;
 
             // Handle label clicks
-            query = 'input.' + self.options.styled;
-            $(query).each(function(){
+            $('label.cfe')
+                .not(':disabled, .cfe-disabled, .cfe-readonly')
 
-                if ($('span#' + this.id + '_cf.disabled').length) {
-                    return;
-                }
+                // Remove old binds
+                .off('.cfe')
 
-                $(this)
-                    .parent()
-                    .undelegate(query, 'change')
-                    .delegate(query, 'change', function(e){
-                        self.reset();
-                    });
+                // New binds
+                .on('click.cfe', function(e){
+                    e.preventDefault();
+                })
+                .on('mousedown.cfe', function(e){
+                    var el = document.getElementById('cfe-' + this.getAttribute('for'));
 
-                if ($.browser.msie && $.browser.version < 9) {
-                    $('label[for=' + this.id + ']').bind('click', function(){
-                        var mouseup = jQuery.Event('mouseup');
-                        mouseup.which = 1;
-                        $('span#' + $(this).attr('for') + '_cf').trigger(mouseup);
-                    });
-                }
-            });
+                    if (e.target !== el) {
+                        self.mousedown(el, e);
+                    }
+                })
+                .on('mouseup.cfe', function(e){
+                    var el = document.getElementById('cfe-' + this.getAttribute('for'));
+
+                    if (e.target !== el) {
+                        self.mouseup(el, e);
+                    }
+                })
+            ;
         },
 
         reset: function(){
             var self = this;
-            $('input.' + self.options.styled).each(function(k, v) {
-                $('#' + this.id + '_cf')[0].style['backgroundPosition'] = !this.checked ? '' : '0 -' + self.options[this.type + 'Height'] * 2 + 'px';
+            $('.' + self.options.cssClass).each(function() {
+                self.setState( document.getElementById('cfe-' + this.id), 0);
             });
         },
 
-        mousedown: function(e, el) {
-            if (e.which !== 1) { return; } // Only respond to left mouse clicks
+        mousedown: function(el, e) {
+            if (!(e.isTrigger || e.which === 1)) { return; } // Only respond to left mouse clicks
 
-            var self = this,
-                input = $('#' + el.id.split('_cf').shift())[0],
-                offset = self.options[input.type + 'Height'] * (input.checked ? 3 : 1);
-
-            el.style['backgroundPosition'] = '0 -' + offset + 'px';
+            var input = document.getElementById( el.id.split('cfe-').pop() );
+            this.setState(el, (input.checked ? 3 : 1));
         },
 
-        mouseup: function(e, el) {
-            if (e.which !== 1) { return; } // Only respond to left mouse clicks
+        mouseup: function(el, e) {
+            if (!(e.isTrigger || e.which === 1)) { return; } // Only respond to left mouse clicks
 
-            var self = this,
-                input = $('#' + el.id.split('_cf').shift())[0];
+            // e.preventDefault();
 
-            el.style['backgroundPosition'] = input.checked && input.type === 'checkbox' ? '' : '0 -' + self.options[input.type + 'Height'] * 2 + 'px';
+            var self = this;
+            var input = document.getElementById( el.id.split('cfe-').pop() );
 
-            if (input.type == 'radio' && input.checked === true) {
-                // Prevent unselecting radio option
+            // Prevent unselecting radio option
+            if (input.type === 'radio' && input.checked === true) {
+                this.setState(el, 2);
                 return;
             }
 
-            $('input[type=radio][name=' + input.name + ']').not('#' + input.id).each(function(){
-                $('#' + this.id + '_cf')[0].style['backgroundPosition'] = '';
-            });
+            // Reset all other radio buttons in group
+            $('.' + this.options.cssClass + '[type=radio][name=' + input.name + ']')
+                .not(':disabled, .cfe-disabled, #' + input.id)
+                .each(function(){
+                    self.setState( document.getElementById('cfe-' + this.id), 0);
+                })
+            ;
 
-            input.checked = !input.checked;
-            $(input).trigger('change');
+            // Set state
+            this.setState(el, (input.checked ? 0 : 2));
+
+            // Set the checkbox state
+            if (!e.isTrigger ) {
+               input.checked = !input.checked;
+            }
+        },
+
+        change: function(e){
+
+            var value = this.value;
+
+            // Remove 'C:\fakepath\' from string
+            if (this.type === 'file') {
+                value = value.replace(/C:\\fakepath\\/, '');
+            }
+
+            document.getElementById('cfe-' + this.id).innerHTML = value;
+        },
+
+        setState: function(el, state) {
+            // Remove previous states
+            el.className = el.className.replace(/(?:^|\s)cfe-state-\d(?!\S)/, '');
+
+            // Add new state.
+            el.className += ' cfe-state-' + state;
         }
 
     };
 
     // Default CustomFormElements options
     CustomFormElements.options = {
-        styled: 'styled',
-        uniqueClassName: 'customFormElement',
-        checkboxHeight: 12,
-        radioHeight: 11,
-        selectWidth: 161,
-        fileWidth: 161
+        cssClass: 'cfe-styled'
     };
 
     // Expose CustomFormElements to the global object
     window.CustomFormElements = CustomFormElements;
+
+    // Create String's trim function if we don't have it.
+    if(!String.prototype.trim) {
+        String.prototype.trim = function () {
+            return this.replace(/^\s+|\s+$/g,'');
+        };
+    }
+
+    if (!Function.prototype.bind) {
+        Function.prototype.bind = function (oThis) {
+            if (typeof this !== "function") {
+                // closest thing possible to the ECMAScript 5 internal IsCallable function
+                throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+            }
+
+            var aArgs = Array.prototype.slice.call(arguments, 1),
+                fToBind = this,
+                fNOP = function () {},
+                fBound = function () {
+                    return fToBind.apply(
+                        this instanceof fNOP ? this : oThis || window,
+                        aArgs.concat(Array.prototype.slice.call(arguments))
+                    );
+                };
+
+            fNOP.prototype = this.prototype;
+            fBound.prototype = new fNOP();
+
+            return fBound;
+        };
+    }
+
 })(window, document, jQuery);

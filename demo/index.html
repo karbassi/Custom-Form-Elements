@@ -1,77 +1,104 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <title>Custom Form Elements</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script src="../src/custom-form-elements.js"></script>
-    <style>
-        .radio,
-        .checkbox,
-        .select,
-        .file {
-            display: inline-block;
-            cursor: pointer;
-            background-position: 0 0;
-            background-color: transparent;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
-        }
+    <head>
+        <meta charset="utf-8" />
+        <title>Custom Form Elements</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+        <script src="../src/custom-form-elements.js"></script>
+        <style>
+            .cfe-radio,
+            .cfe-checkbox,
+            .cfe-select,
+            .cfe-file {
+                display: inline-block;
+                cursor: pointer;
+                background: 0 0 no-repeat;
+            }
 
-        .radio {
-            background-image: url(radios.png);
-            width: 12px;
-            height: 11px;
-        }
+            .cfe-radio {
+                background: url(radios.png);
+                width: 12px;
+                height: 11px;
+            }
 
-        .checkbox {
-            background-image: url(checkbox.png);
-            width: 12px;
-            height: 12px;
-            padding: 0;
-        }
+            .cfe-radio.cfe-state-0 { background-position: 0 0; }
+            .cfe-radio.cfe-state-1 { background-position: 0 -11px; }
+            .cfe-radio.cfe-state-2 { background-position: 0 -22px; }
+            .cfe-radio.cfe-state-3 { background-position: 0 -33px; }
 
-        .select,
-        .file {
-            color: #8A7967;
-            font: 10px/21px arial,sans-serif;
-            overflow: hidden;
-            position: absolute;
-            padding: 0 24px 0 11px;
-            width: 126px;
-            height: 21px;
-        }
+            .cfe-checkbox {
+                background: url(checkbox.png);
+                width: 12px;
+                height: 12px;
+                padding: 0;
+            }
 
-        .select {
-            background-image: url(select.png);
-        }
+            .cfe-checkbox.cfe-state-0 { background-position: 0 0; }
+            .cfe-checkbox.cfe-state-1 { background-position: 0 -12px; }
+            .cfe-checkbox.cfe-state-2 { background-position: 0 -24px; }
+            .cfe-checkbox.cfe-state-3 { background-position: 0 -36px; }
 
-        .file {
-            background-image: url(file.png);
-        }
+            .cfe-select,
+            .cfe-file {
+                font: 10px/21px arial,sans-serif;
+                color: #8A7967;
+                overflow: hidden;
+                position: absolute;
+                padding: 0 24px 0 11px;
+                width: 126px;
+                height: 21px;
+            }
 
-        div {
-            margin: 2em;
-        }
-    </style>
-    <script>
-        jQuery(document).ready(function($) {
-            var cf = new CustomFormElements();
-        });
-    </script>
-</head>
+            .cfe-select {
+                background: url(select.png);
+            }
+
+            select.cfe-styled {
+                position: relative;
+                width: 161px;
+            }
+
+            .cfe-file {
+                background: url(file.png);
+            }
+
+            /* Disabled style */
+            .cfe-disabled,
+            .cfe-readonly {
+                /* IE 8 */
+                -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+
+                /* IE 5-7 */
+                filter: alpha(opacity=50);
+
+                /* CSS3 */
+                opacity: 0.5;
+            }
+
+            /* Demo only*/
+
+            div {
+                margin: 2em;
+            }
+        </style>
+        <script>
+            jQuery(document).ready(function($) {
+                var cf = new CustomFormElements();
+            });
+        </script>
+    </head>
 <body>
     <div>
         <h3>Select Box</h3>
-        <select id="select1" class="styled">
-            <option selected>One</option>
+        <select id="select1" class="cfe-styled">
+            <option selected>One and one</option>
             <option>Two</option>
         </select>
     </div>
 
     <div>
         <h3>Select Box Disabled</h3>
-        <select id="select2" class="styled" disabled>
+        <select id="select2" class="cfe-styled" disabled>
             <option>One</option>
             <option selected>Two</option>
         </select>
@@ -79,67 +106,74 @@
 
     <div>
         <h3>File Upload</h3>
-        <input class="styled" type="file" id="file1" name="file1" value="" />
+        <input class="cfe-styled" type="file" id="file1" name="file1" value="" />
     </div>
 
     <div>
         <h3>Default Checkbox</h3>
         <label for="checkbox1">Checkbox 1</label>
-        <input class="styled" type="checkbox" id="checkbox1" name="checkbox1" value="checkbox" />
+        <input class="cfe-styled" type="checkbox" id="checkbox1" name="checkbox1" value="checkbox" />
     </div>
 
     <div>
         <h3>Checkbox Checked by default</h3>
         <label for="checkbox2">Checkbox 2</label>
-        <input class="styled" type="checkbox" id="checkbox2" name="checkbox2" value="checkbox" checked="checked" />
+        <input class="cfe-styled" type="checkbox" id="checkbox2" name="checkbox2" value="checkbox" checked="checked" />
     </div>
 
     <div>
         <h3>Label after Checkbox</h3>
-        <input class="styled" type="checkbox" id="checkbox3" name="checkbox3" value="checkbox" />
+        <input class="cfe-styled" type="checkbox" id="checkbox3" name="checkbox3" value="checkbox" />
         <label for="checkbox3">Checkbox 3</label>
+    </div>
+
+    <div>
+        <h3>Label wrapping Checkbox</h3>
+        <label for="checkbox4">
+            <input class="cfe-styled" type="checkbox" id="checkbox4" name="checkbox4" value="checkbox" /> Checkbox 3
+        </label>
     </div>
 
     <div>
         <h3>Default Radio Button</h3>
         <label for="radio1">Radio 1</label>
-        <input class="styled" type="radio" id="radio1" name="radio1" value="radio" />
+        <input class="cfe-styled" type="radio" id="radio1" name="radio1" value="radio" />
     </div>
 
     <div>
         <h3>Radio Button Disabled</h3>
         <label for="radio2">Radio 2</label>
-        <input class="styled" type="radio" id="radio2" name="radio2" value="radio" disabled="disabled" />
+        <input class="cfe-styled" type="radio" id="radio2" name="radio2" value="radio" disabled="disabled" />
     </div>
 
     <div>
         <h3>Default Radio Group</h3>
         <label for="radiog1">Radio 1</label>
-        <input class="styled" type="radio" id="radiog1" name="radiog1" value="radio" />
+        <input class="cfe-styled" type="radio" id="radiog1" name="radio-group-1" value="radio" />
 
         <label for="radiog2">Radio 2</label>
-        <input class="styled" type="radio" id="radiog2" name="radiog1" value="radio" />
+        <input class="cfe-styled" type="radio" id="radiog2" name="radio-group-1" value="radio" />
 
         <label for="radiog3">Radio 3</label>
-        <input class="styled" type="radio" id="radiog3" name="radiog1" value="radio" />
+        <input class="cfe-styled" type="radio" id="radiog3" name="radio-group-1" value="radio" />
 
         <label for="radiog4">Radio 4</label>
-        <input class="styled" type="radio" id="radiog4" name="radiog1" value="radio" />
+        <input class="cfe-styled" type="radio" id="radiog4" name="radio-group-1" value="radio" />
     </div>
 
     <div>
         <h3>Radio Group with Radio 2 Disabled</h3>
         <label for="radiog5">Radio 1</label>
-        <input class="styled" type="radio" id="radiog5" name="radiog2" value="radio" />
+        <input class="cfe-styled" type="radio" id="radiog5" name="radio-group-2" value="radio" />
 
         <label for="radiog6">Radio 2</label>
-        <input class="styled" type="radio" id="radiog6" name="radiog2" value="radio" disabled="disabled" />
+        <input class="cfe-styled" type="radio" id="radiog6" name="radio-group-2" value="radio" disabled="disabled" />
 
         <label for="radiog7">Radio 3</label>
-        <input class="styled" type="radio" id="radiog7" name="radiog2" value="radio" />
+        <input class="cfe-styled" type="radio" id="radiog7" name="radio-group-2" value="radio" />
 
         <label for="radiog8">Radio 4</label>
-        <input class="styled" type="radio" id="radiog8" name="radiog2" value="radio" />
+        <input class="cfe-styled" type="radio" id="radiog8" name="radio-group-2" value="radio" />
     </div>
 
 </body>
