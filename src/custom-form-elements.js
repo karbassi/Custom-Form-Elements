@@ -27,7 +27,7 @@ Example:
 
         // All options
         var cf = new CustomFormElements({
-            class: 'cfe-styled',
+            cssClass: 'cfe-styled',
         });
 
         // If you need to reinitialize dynamically added form elements:
@@ -164,8 +164,6 @@ Example:
 
             // Handle label clicks
             $('label.cfe')
-                .not(':disabled, .cfe-disabled, .cfe-readonly')
-
                 // Remove old binds
                 .off('.cfe')
 
@@ -176,14 +174,14 @@ Example:
                 .on('mousedown.cfe', function(e){
                     var el = document.getElementById('cfe-' + this.getAttribute('for'));
 
-                    if (e.target !== el) {
+                    if (e.target !== el && el.className.indexOf('cfe-disabled') < 0) {
                         self.mousedown(el, e);
                     }
                 })
                 .on('mouseup.cfe', function(e){
                     var el = document.getElementById('cfe-' + this.getAttribute('for'));
 
-                    if (e.target !== el) {
+                    if (e.target !== el && el.className.indexOf('cfe-disabled') < 0) {
                         self.mouseup(el, e);
                     }
                 })
@@ -237,11 +235,11 @@ Example:
 
         change: function(e){
 
-            var value = this.value;
+            var value = this.options[this.selectedIndex].text;
 
             // Remove 'C:\fakepath\' from string
             if (this.type === 'file') {
-                value = value.replace(/C:\\fakepath\\/, '');
+                value = this.value.replace(/C:\\fakepath\\/, '');
             }
 
             document.getElementById('cfe-' + this.id).innerHTML = value;
