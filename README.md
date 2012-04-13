@@ -1,5 +1,4 @@
-Custom Form Elements
-====================
+# Custom Form Elements
 
 A lightweight custom form styler for radio, checkbox and select elements. Radio and Checkboxes have four states rather than just two.
 
@@ -9,100 +8,129 @@ This project lives on GitHub: [http://github.com/karbassi/Custom-Form-Elements](
 
 This whole project is licensed under the MIT License: [http://opensource.org/licenses/mit-license.php](http://opensource.org/licenses/mit-license.php)
 
-Requirements
--------------
+## Tested Environments
 
-* Requires [jQuery 1.4.2+](http://jquery.com)
+### Desktop
+
+* Firefox 3.5+
+* Chrome 10+
+
+### Mobile
+
+* iPhone 4 w/ iOS 5.1
+* iPad w/ iOS 5.1
+
+## Requirements
+
+* Requires [jQuery 1.7+](http://jquery.com)
 * All `form` elements require `id`s.
 
-Note
------
+## Note
 
-* Call once your document is loaded. If you are dynamically loading content, use the `repaint` function.
-* The `input` file should not be wrapped with the `label` tag.
-* The sprite order from top to bottom is:
-  1. unchecked
-  2. unchecked-mousedown
-  3. checked
-  4. checked-mousedown
-* `checkboxHeight` and `radioHeight` should all be set to 1/4th the sprite height.
-* `selectWidth` is the width of the select box image.
-* Remember that `select` elements cannot be `readonly`; they can be `disabled` though.
-* As of jQuery 1.4.2, there is an [open bug](http://dev.jquery.com/ticket/7071) pertaining to jQuery, VML, and IE. Version 0.5+ of this script has a work around.
+* Call once your document is loaded.
+* If you are dynamically loading content, use the `repaint` function.
 
+## Demo
 
-Example
---------
+[http://karbassi.github.com/Custom-Form-Elements/demo.html](http://karbassi.github.com/Custom-Form-Elements/demo.html)
 
-CSS
-===
-    .radio,
-    .checkbox,
-    .select {
-        display: inline-block;
-        cursor: pointer;
-        background-position: 0 0;
-        background-color: transparent;
-        background-repeat: no-repeat;
-        background-attachment: scroll;
-    }
+## Example
 
-    .radio {
-        background-image: url(radios.png);
-        width: 12px;
-        height: 11px;
-    }
+### CSS
 
-    .checkbox {
-        background-image: url(checkbox.png);
-        padding: 0;
-        width: 12px;
-        height: 12px;
-    }
+```css
+.cfe-radio,
+.cfe-checkbox,
+.cfe-select,
+.cfe-file {
+    display: inline-block;
+    cursor: pointer;
+    background: 0 0 no-repeat;
+}
 
-    .select {
-        background-image: url(select-short.png);
-        color: #8A7967;
-        font: 10px/21px arial,sans-serif;
-        overflow: hidden;
-        position: absolute;
-        padding: 0 24px 0 11px;
-        width: 126px;
-        height: 21px;
-    }
+.cfe-radio,
+.cfe-checkbox {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
 
+.cfe-radio {
+    background: url(radios.png);
+    width: 12px;
+    height: 11px;
+}
 
-Javascript
-==========
+.cfe-radio.cfe-state-0 { background-position: 0 0; }
+.cfe-radio.cfe-state-1 { background-position: 0 -11px; }
+.cfe-radio.cfe-state-2 { background-position: 0 -22px; }
+.cfe-radio.cfe-state-3 { background-position: 0 -33px; }
 
-    jQuery(document).ready(function($) {
+.cfe-checkbox {
+    background: url(checkbox.png);
+    width: 12px;
+    height: 12px;
+    padding: 0;
+}
 
-        // Extremely minimum version:
-        // Default settings apply. All input/select tags with a class of 'styled' are affected.
-        var cf = new CustomFormElements();
+.cfe-checkbox.cfe-state-0 { background-position: 0 0; }
+.cfe-checkbox.cfe-state-1 { background-position: 0 -12px; }
+.cfe-checkbox.cfe-state-2 { background-position: 0 -24px; }
+.cfe-checkbox.cfe-state-3 { background-position: 0 -36px; }
 
-        // Minimum version:
-        var cf = new CustomFormElements({
-            checkboxHeight: 12,
-            radioHeight: 11,
-            selectWidth: 161
-        });
+.cfe-select,
+.cfe-file {
+    font: 10px/21px arial,sans-serif;
+    color: #8A7967;
+    overflow: hidden;
+    position: absolute;
+    padding: 0 24px 0 11px;
+    width: 126px;
+    height: 21px;
+}
 
-        // All options
-        var cf = new CustomFormElements({
-            styled: 'styled',
-            uniqueClassName: 'customFormElement',
-            checkboxHeight: 12,
-            radioHeight: 11,
-            selectWidth: 161
-        });
+.cfe-select {
+    background: url(select.png);
+}
 
-        // If you need to reinitialize dynamically added form elements:
-        cf.repaint();
+select.cfe-styled {
+    position: relative;
+    width: 161px;
+}
 
+.cfe-file {
+    background: url(file.png);
+}
+
+/* Disabled style */
+.cfe-disabled,
+.cfe-readonly {
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+
+    /* IE 5-7 */
+    filter: alpha(opacity=50);
+
+    /* CSS3 */
+    opacity: 0.5;
+}
+```
+
+### Javascript
+
+```javascript
+jQuery(document).ready(function($) {
+
+    // Default settings apply.
+    // All input/select tags with a class of 'cfe-styled' are affected.
+    var cf = new CustomFormElements();
+
+    // All options
+    var cf = new CustomFormElements({
+        cssClass: 'styled'
     });
 
-Demo
------
+    // If you need to reinitialize dynamically added form elements:
+    cf.repaint();
 
-[http://karbassi.github.com/Custom-Form-Elements/](http://karbassi.github.com/Custom-Form-Elements/)
+});
+```
+

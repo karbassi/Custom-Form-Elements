@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.12b
+Custom Form Elements v0.12
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -10,12 +10,10 @@ Requires jQuery v1.7+
 Note:
     - Call once your document is loaded.
     - Custom `span` elements have four states:
-      - state-0: unchecked
-      - state-1: unchecked-mousedown
-      - state-2: checked
-      - state-3: checked-mousedown
-    - Remember that 'select' elements cannot be 'readonly'; they can be 'disabled' though.
-    - The 'input' file should not be wrapped with the 'label' tag.
+        - state-0: unchecked
+        - state-1: unchecked-mousedown
+        - state-2: checked
+        - state-3: checked-mousedown
 
 Example:
 
@@ -80,7 +78,7 @@ Example:
             ).each(function(){
 
                 var existing = $('#cfe-' + this.id + '.cfe');
-                if (existing.length > 0) {
+                if (existing.length) {
                     existing.remove();
                 }
 
@@ -136,7 +134,8 @@ Example:
 
             // Radio and Checkboxes
             $('.cfe-radio, .cfe-checkbox')
-                //
+
+                // Filter out any disabled/readonly items
                 .not('.cfe-disabled, .cfe-readonly')
 
                 // Remove old binds
@@ -164,13 +163,16 @@ Example:
 
             // Handle label clicks
             $('label.cfe')
+
                 // Remove old binds
                 .off('.cfe')
 
-                // New binds
+                // Prevent normal label event
                 .on('click.cfe', function(e){
                     e.preventDefault();
                 })
+
+                // Set mousedown state
                 .on('mousedown.cfe', function(e){
                     var el = document.getElementById('cfe-' + this.getAttribute('for'));
 
@@ -178,6 +180,8 @@ Example:
                         self.mousedown(el, e);
                     }
                 })
+
+                // Set mouseup state
                 .on('mouseup.cfe', function(e){
                     var el = document.getElementById('cfe-' + this.getAttribute('for'));
 
@@ -186,13 +190,6 @@ Example:
                     }
                 })
             ;
-        },
-
-        reset: function(){
-            var self = this;
-            $('.' + self.options.cssClass).each(function() {
-                self.setState( document.getElementById('cfe-' + this.id), 0);
-            });
         },
 
         mousedown: function(el, e) {
