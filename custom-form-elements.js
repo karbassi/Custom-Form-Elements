@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.12
+Custom Form Elements v0.13
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -202,8 +202,6 @@ Example:
         mouseup: function(el, e) {
             if (!(e.isTrigger || e.which === 1)) { return; } // Only respond to left mouse clicks
 
-            // e.preventDefault();
-
             var self = this;
             var input = document.getElementById( el.id.split('cfe-').pop() );
 
@@ -228,6 +226,9 @@ Example:
             if (!e.isTrigger ) {
                input.checked = !input.checked;
             }
+
+            // Bubble up change event.
+            $(input).trigger('change');
         },
 
         change: function(e){
