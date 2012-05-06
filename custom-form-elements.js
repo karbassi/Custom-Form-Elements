@@ -194,6 +194,7 @@ Example:
 
         mousedown: function(el, e) {
             if (!(e.isTrigger || e.which === 1)) { return; } // Only respond to left mouse clicks
+            if (el.className.indexOf('cfe-disabled') > -1) { return; }  // only respond if element isn't marked as disabled
 
             var input = document.getElementById( el.id.split('cfe-').pop() );
             this.setState(el, (input.checked ? 3 : 1));
@@ -201,6 +202,7 @@ Example:
 
         mouseup: function(el, e) {
             if (!(e.isTrigger || e.which === 1)) { return; } // Only respond to left mouse clicks
+            if (el.className.indexOf('cfe-disabled') > -1) { return; }  // only respond if element isn't marked as disabled
 
             var self = this;
             var input = document.getElementById( el.id.split('cfe-').pop() );
