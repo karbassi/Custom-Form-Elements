@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.13
+Custom Form Elements v0.14
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -133,10 +133,7 @@ Example:
             var self = this;
 
             // Radio and Checkboxes
-            $('.cfe-radio, .cfe-checkbox')
-
-                // Filter out any disabled/readonly items
-                .not('.cfe-disabled, .cfe-readonly')
+            $('.cfe-radio:not(.cfe-disabled, .cfe-readonly), .cfe-checkbox:not(.cfe-disabled, .cfe-readonly)')
 
                 // Remove old binds
                 .off('.cfe')
