@@ -82,7 +82,7 @@ Example:
                     existing.remove();
                 }
 
-                // Class Names for the ement
+                // Class Names for the element
                 var className =
                     [
                         // Plugins unique name
