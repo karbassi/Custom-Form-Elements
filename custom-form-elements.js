@@ -37,9 +37,9 @@ Example:
 
 (function(window, document, $) {
 
-    function CustomFormElements(options) {
+    var CustomFormElements = function(options) {
         this.init.call(this, options);
-    }
+    };
 
     CustomFormElements.prototype = {
         init: function(options) {
@@ -68,14 +68,14 @@ Example:
         },
 
 
-        repaint: function(){
+        repaint: function() {
             var self = this;
 
             $('.' + self.options.cssClass + '[type=checkbox], ' +
               '.' + self.options.cssClass + '[type=radio], ' +
               '.' + self.options.cssClass + '[type=file], ' +
               '.' + self.options.cssClass
-            ).each(function(){
+            ).each(function() {
 
                 var existing = $('#cfe-' + this.id + '.cfe');
                 if (existing.length) {
@@ -129,7 +129,7 @@ Example:
             this.bind();
         },
 
-        bind: function(){
+        bind: function() {
             var self = this;
 
             // Radio and Checkboxes
@@ -168,12 +168,12 @@ Example:
                 .off('.cfe')
 
                 // Prevent normal label event
-                .on('click.cfe', function(e){
+                .on('click.cfe', function(e) {
                     e.preventDefault();
                 })
 
                 // Set mousedown state
-                .on('mousedown.cfe', function(e){
+                .on('mousedown.cfe', function(e) {
                     var el = document.getElementById('cfe-' + this.htmlFor);
 
                     if (e.target !== el && el.className.indexOf('cfe-disabled') < 0) {
@@ -182,7 +182,7 @@ Example:
                 })
 
                 // Set mouseup state
-                .on('mouseup.cfe', function(e){
+                .on('mouseup.cfe', function(e) {
                     var el = document.getElementById('cfe-' + this.htmlFor);
 
                     if (e.target !== el && el.className.indexOf('cfe-disabled') < 0) {
@@ -193,14 +193,20 @@ Example:
         },
 
         mousedown: function(el, e) {
-            if (!(e.isTrigger || e.which === 1)) { return; } // Only respond to left mouse clicks
+            // Only respond to left mouse clicks
+            if (!(e.isTrigger || e.which === 1)) {
+                return;
+            }
 
             var input = document.getElementById( el.id.split('cfe-').pop() );
             this.setState(el, (input.checked ? 3 : 1));
         },
 
         mouseup: function(el, e) {
-            if (!(e.isTrigger || e.which === 1)) { return; } // Only respond to left mouse clicks
+            // Only respond to left mouse clicks
+            if (!(e.isTrigger || e.which === 1)) {
+                return;
+            }
 
             var self = this;
             var input = document.getElementById( el.id.split('cfe-').pop() );
@@ -214,7 +220,7 @@ Example:
             // Reset all other radio buttons in group
             $('.' + this.options.cssClass + '[type=radio][name=' + input.name + ']')
                 .not(':disabled, .cfe-disabled, #' + input.id)
-                .each(function(){
+                .each(function() {
                     self.setState( document.getElementById('cfe-' + this.id), 0);
                 })
             ;
@@ -231,7 +237,7 @@ Example:
             $(input).trigger('change');
         },
 
-        change: function(e){
+        change: function(e) {
 
             var value = this.options[this.selectedIndex].text;
 
@@ -261,15 +267,17 @@ Example:
     // Expose CustomFormElements to the global object
     window.CustomFormElements = CustomFormElements;
 
+    // HELPERS
+
     // Create String's trim function if we don't have it.
     if(!String.prototype.trim) {
-        String.prototype.trim = function () {
+        String.prototype.trim = function() {
             return this.replace(/^\s+|\s+$/g,'');
         };
     }
 
     if (!Function.prototype.bind) {
-        Function.prototype.bind = function (oThis) {
+        Function.prototype.bind = function(oThis) {
             if (typeof this !== "function") {
                 // closest thing possible to the ECMAScript 5 internal IsCallable function
                 throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
@@ -277,8 +285,8 @@ Example:
 
             var aArgs = Array.prototype.slice.call(arguments, 1),
                 fToBind = this,
-                fNOP = function () {},
-                fBound = function () {
+                fNOP = function() {},
+                fBound = function() {
                     return fToBind.apply(
                         this instanceof fNOP ? this : oThis || window,
                         aArgs.concat(Array.prototype.slice.call(arguments))
