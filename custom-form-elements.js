@@ -174,7 +174,7 @@ Example:
 
                 // Set mousedown state
                 .on('mousedown.cfe', function(e){
-                    var el = document.getElementById('cfe-' + this.getAttribute('for'));
+                    var el = document.getElementById('cfe-' + this.htmlFor);
 
                     if (e.target !== el && el.className.indexOf('cfe-disabled') < 0) {
                         self.mousedown(el, e);
@@ -183,7 +183,7 @@ Example:
 
                 // Set mouseup state
                 .on('mouseup.cfe', function(e){
-                    var el = document.getElementById('cfe-' + this.getAttribute('for'));
+                    var el = document.getElementById('cfe-' + this.htmlFor);
 
                     if (e.target !== el && el.className.indexOf('cfe-disabled') < 0) {
                         self.mouseup(el, e);
