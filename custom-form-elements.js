@@ -75,9 +75,9 @@ Example:
               '.' + this.options.cssClass
             ).each(function() {
 
-                var existing = $('#cfe-' + this.id + '.cfe');
-                if (existing.length) {
-                    existing.remove();
+                var existing = document.getElementById('cfe-' + this.id + '.cfe');
+                if (existing) {
+                    $(existing).remove();
                 }
 
                 // Class Names for the element
