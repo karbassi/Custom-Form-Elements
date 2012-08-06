@@ -123,19 +123,19 @@ Example:
 
             });
 
-            this.bind();
+            this.listeners();
         },
 
-        bind: function() {
+        listeners: function() {
             var self = this;
 
             // Radio and Checkboxes
             $('.cfe-radio:not(.cfe-disabled, .cfe-readonly), .cfe-checkbox:not(.cfe-disabled, .cfe-readonly)')
 
-                // Remove old binds
+                // Remove old event-binding
                 .off('.cfe')
 
-                // New binds
+                // New event-binding
                 .on('mousedown.cfe', function(e) {
                     self.mousedown(this, e);
                 })
@@ -148,17 +148,17 @@ Example:
             $('select.' + self.options.cssClass +
               ', input.' + self.options.cssClass + '[type=file]')
 
-                // Remove old binds
+                // Remove old event-binding
                 .off('.cfe')
 
-                // New binds
+                // New event-binding
                 .on('change.cfe', self.change)
             ;
 
             // Handle label clicks
             $('label.cfe')
 
-                // Remove old binds
+                // Remove old event-binding
                 .off('.cfe')
 
                 // Prevent normal label event
