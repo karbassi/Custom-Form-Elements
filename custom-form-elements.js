@@ -69,12 +69,10 @@ Example:
 
 
         repaint: function() {
-            var self = this;
-
-            $('.' + self.options.cssClass + '[type=checkbox], ' +
-              '.' + self.options.cssClass + '[type=radio], ' +
-              '.' + self.options.cssClass + '[type=file], ' +
-              '.' + self.options.cssClass
+            $('.' + this.options.cssClass + '[type=checkbox], ' +
+              '.' + this.options.cssClass + '[type=radio], ' +
+              '.' + this.options.cssClass + '[type=file], ' +
+              '.' + this.options.cssClass
             ).each(function() {
 
                 var existing = $('#cfe-' + this.id + '.cfe');
