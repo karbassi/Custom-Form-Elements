@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.14
+Custom Form Elements v0.15
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -80,35 +80,34 @@ Example:
                     $(existing).remove();
                 }
 
-                // Class Names for the element
-                var className =
-                    [
-                        // Plugins unique name
-                        'cfe',
+                // Plugins unique name
+                var className = 'cfe';
 
-                        // Form Element type
-                        'cfe-' + (this.type === 'select-one' ? 'select' : this.type),
+                // Form Element type
+                if (this.type === 'select-one') {
+                    className += ' cfe-select';
+                } else {
+                    className += ' cfe-' + this.type;
 
-                        // If the element is checked or not
-                        this.type !== 'select-one' && this.type !== 'file' ?
-                            'cfe-' + (this.checked ? 'state-2' : 'state-0'):
-                            '',
+                    // If the element is checked or not
+                    if (this.type !== 'file') {
+                        if (this.checked) {
+                            className += ' cfe-state-2';
+                        } else {
+                            className += ' cfe-state-0';
+                        }
+                    }
+                }
 
-                        // If the element is disabled or not
-                        this.disabled ? 'cfe-disabled' : '',
+                // If the element is disabled or not
+                if (this.disabled) {
+                    className += ' cfe-disabled';
+                }
 
-                        // If the element is readonly or not
-                        this.getAttribute('readonly') ? 'cfe-readonly' : ''
-                    ]
-
-                    .sort()
-
-                    // Combine array into a string with seperator of space.
-                    .join(' ')
-
-                    // Trim
-                    .trim()
-                ;
+                // If the element is readonly or not
+                if (this.getAttribute('readonly')) {
+                    className += ' cfe-readonly';
+                }
 
                 // Create the span element
                 var span = document.createElement('span');
@@ -261,38 +260,5 @@ Example:
 
     // Expose CustomFormElements to the global object
     window.CustomFormElements = CustomFormElements;
-
-    // HELPERS
-
-    // Create String's trim function if we don't have it.
-    if(!String.prototype.trim) {
-        String.prototype.trim = function() {
-            return this.replace(/^\s+|\s+$/g,'');
-        };
-    }
-
-    if (!Function.prototype.bind) {
-        Function.prototype.bind = function(oThis) {
-            if (typeof this !== "function") {
-                // closest thing possible to the ECMAScript 5 internal IsCallable function
-                throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-            }
-
-            var aArgs = Array.prototype.slice.call(arguments, 1),
-                fToBind = this,
-                fNOP = function() {},
-                fBound = function() {
-                    return fToBind.apply(
-                        this instanceof fNOP ? this : oThis || window,
-                        aArgs.concat(Array.prototype.slice.call(arguments))
-                    );
-                };
-
-            fNOP.prototype = this.prototype;
-            fBound.prototype = new fNOP();
-
-            return fBound;
-        };
-    }
 
 })(window, document, jQuery);
