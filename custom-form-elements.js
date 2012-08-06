@@ -233,11 +233,13 @@ Example:
 
         change: function(e) {
 
-            var value = this.options[this.selectedIndex].text;
+            var value;
 
             // Remove 'C:\fakepath\' from string
             if (this.type === 'file') {
                 value = this.value.replace(/C:\\fakepath\\/, '');
+            } else {
+                value = this.options[this.selectedIndex].text;
             }
 
             document.getElementById('cfe-' + this.id).innerHTML = value;
