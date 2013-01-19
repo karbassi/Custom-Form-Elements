@@ -8,7 +8,7 @@ Developed by [Ali Karbassi](http://karbassi.com).
 
 This project lives on GitHub: [http://github.com/karbassi/Custom-Form-Elements](http://github.com/karbassi/Custom-Form-Elements)
 
-This whole project is licensed under the MIT License: [http://opensource.org/licenses/mit-license.php](http://opensource.org/licenses/mit-license.php)
+This whole project is licensed under the MIT License: [http://karbassi.mit-license.org](http://karbassi.mit-license.org)
 
 ## Tested Environments
 

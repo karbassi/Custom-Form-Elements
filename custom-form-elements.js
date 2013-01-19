@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.14
+Custom Form Elements v2.0.0
 
 http://github.com/karbassi/Custom-Form-Elements
 

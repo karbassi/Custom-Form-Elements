@@ -1,0 +1,35 @@
+{
+  "name": "Custom Form Elements",
+  "title": "Custom Form Elements",
+  "description": "A lightweight custom form styler for radio, checkbox and select elements.",
+  "keywords": [
+    "ui",
+    "form",
+    "input",
+    "select",
+    "textarea",
+    "radio",
+    "checkbox",
+    "file"
+  ],
+  "version": "2.0.0",
+  "author": {
+    "name": "Ali Karbassi",
+    "email": "ali@karbassi.com",
+    "url": "http://karbassi.com"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://karbassi.mit-license.org"
+    }
+  ],
+  "bugs": "https://github.com/karbassi/Custom-Form-Elements/issues",
+  "homepage": "http://karbassi.github.com/Custom-Form-Elements/",
+  "demo": "http://karbassi.github.com/Custom-Form-Elements/demo.html",
+  "docs": "https://github.com/karbassi/Custom-Form-Elements/blob/stable/README.md",
+  "download": "https://github.com/karbassi/Custom-Form-Elements/archive/stable.zip",
+  "dependencies": {
+    "jquery": ">=1.7"
+  }
+}
