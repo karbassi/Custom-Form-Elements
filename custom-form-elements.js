@@ -215,7 +215,7 @@ Example:
             }
 
             // Reset all other radio buttons in group
-            $('.' + this.options.cssClass + '[type=radio][name=' + input.name + ']')
+            $('.' + this.options.cssClass + '[type=radio][name="' + input.name + '"]')
                 .not(':disabled, .cfe-disabled, #' + input.id)
                 .each(function() {
                     self.setState( document.getElementById('cfe-' + this.id), 0);
