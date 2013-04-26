@@ -126,6 +126,15 @@ Example:
 
             });
 
+            // Listen to checkbox change events and update the style accordingly
+            var cb = this;
+            if($(this).attr("type") === "checkbox") {
+                $(this).off("cfe-styled").on("change.cfe-styled", function() {
+                    var el = document.getElementById('cfe-' + cb.id);
+                    self.setState(el, (this.checked ? 2 : 0));
+                });
+            }
+
             this.bind();
         },
 
