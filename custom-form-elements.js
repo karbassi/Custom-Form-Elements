@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v2.0.0
+Custom Form Elements v0.15
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -69,48 +69,45 @@ Example:
 
 
         repaint: function() {
-            var self = this;
-
-            $('.' + self.options.cssClass + '[type=checkbox], ' +
-              '.' + self.options.cssClass + '[type=radio], ' +
-              '.' + self.options.cssClass + '[type=file], ' +
-              '.' + self.options.cssClass
+            $('.' + this.options.cssClass + '[type=checkbox], ' +
+              '.' + this.options.cssClass + '[type=radio], ' +
+              '.' + this.options.cssClass + '[type=file], ' +
+              '.' + this.options.cssClass
             ).each(function() {
 
-                var existing = $('#cfe-' + this.id + '.cfe');
-                if (existing.length) {
-                    existing.remove();
+                var existing = document.getElementById('cfe-' + this.id + '.cfe');
+                if (existing) {
+                    $(existing).remove();
                 }
 
-                // Class Names for the element
-                var className =
-                    [
-                        // Plugins unique name
-                        'cfe',
+                // Plugins unique name
+                var className = 'cfe';
 
-                        // Form Element type
-                        'cfe-' + (this.type === 'select-one' ? 'select' : this.type),
+                // Form Element type
+                if (this.type === 'select-one') {
+                    className += ' cfe-select';
+                } else {
+                    className += ' cfe-' + this.type;
 
-                        // If the element is checked or not
-                        this.type !== 'select-one' && this.type !== 'file' ?
-                            'cfe-' + (this.checked ? 'state-2' : 'state-0'):
-                            '',
+                    // If the element is checked or not
+                    if (this.type !== 'file') {
+                        if (this.checked) {
+                            className += ' cfe-state-2';
+                        } else {
+                            className += ' cfe-state-0';
+                        }
+                    }
+                }
 
-                        // If the element is disabled or not
-                        this.disabled ? 'cfe-disabled' : '',
+                // If the element is disabled or not
+                if (this.disabled) {
+                    className += ' cfe-disabled';
+                }
 
-                        // If the element is readonly or not
-                        this.getAttribute('readonly') ? 'cfe-readonly' : ''
-                    ]
-
-                    .sort()
-
-                    // Combine array into a string with seperator of space.
-                    .join(' ')
-
-                    // Trim
-                    .trim()
-                ;
+                // If the element is readonly or not
+                if (this.getAttribute('readonly')) {
+                    className += ' cfe-readonly';
+                }
 
                 // Create the span element
                 var span = document.createElement('span');
@@ -126,19 +123,19 @@ Example:
 
             });
 
-            this.bind();
+            this.listeners();
         },
 
-        bind: function() {
+        listeners: function() {
             var self = this;
 
             // Radio and Checkboxes
             $('.cfe-radio:not(.cfe-disabled, .cfe-readonly), .cfe-checkbox:not(.cfe-disabled, .cfe-readonly)')
 
-                // Remove old binds
+                // Remove old event-binding
                 .off('.cfe')
 
-                // New binds
+                // New event-binding
                 .on('mousedown.cfe', function(e) {
                     self.mousedown(this, e);
                 })
@@ -151,17 +148,17 @@ Example:
             $('select.' + self.options.cssClass +
               ', input.' + self.options.cssClass + '[type=file]')
 
-                // Remove old binds
+                // Remove old event-binding
                 .off('.cfe')
 
-                // New binds
+                // New event-binding
                 .on('change.cfe', self.change)
             ;
 
             // Handle label clicks
             $('label.cfe')
 
-                // Remove old binds
+                // Remove old event-binding
                 .off('.cfe')
 
                 // Prevent normal label event
@@ -236,11 +233,13 @@ Example:
 
         change: function(e) {
 
-            var value = this.options[this.selectedIndex].text;
+            var value;
 
             // Remove 'C:\fakepath\' from string
             if (this.type === 'file') {
                 value = this.value.replace(/C:\\fakepath\\/, '');
+            } else {
+                value = this.options[this.selectedIndex].text;
             }
 
             document.getElementById('cfe-' + this.id).innerHTML = value;
@@ -263,38 +262,5 @@ Example:
 
     // Expose CustomFormElements to the global object
     window.CustomFormElements = CustomFormElements;
-
-    // HELPERS
-
-    // Create String's trim function if we don't have it.
-    if(!String.prototype.trim) {
-        String.prototype.trim = function() {
-            return this.replace(/^\s+|\s+$/g,'');
-        };
-    }
-
-    if (!Function.prototype.bind) {
-        Function.prototype.bind = function(oThis) {
-            if (typeof this !== "function") {
-                // closest thing possible to the ECMAScript 5 internal IsCallable function
-                throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-            }
-
-            var aArgs = Array.prototype.slice.call(arguments, 1),
-                fToBind = this,
-                fNOP = function() {},
-                fBound = function() {
-                    return fToBind.apply(
-                        this instanceof fNOP ? this : oThis || window,
-                        aArgs.concat(Array.prototype.slice.call(arguments))
-                    );
-                };
-
-            fNOP.prototype = this.prototype;
-            fBound.prototype = new fNOP();
-
-            return fBound;
-        };
-    }
 
 })(window, document, jQuery);
