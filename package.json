@@ -1,0 +1,34 @@
+{
+  "name": "Custom Form Elements",
+  "description": "A lightweight custom form styler for radio, checkbox and select elements",
+  "version": "0.1",
+  "maintainers": [
+    {
+      "name": "Ali Karbassi",
+      "email": "ali@karbassi.com",
+      "web": "http://tech.karbassi.com"
+    }
+  ],
+  "demos": [
+    "http://tech.karbassi.com/Custom-Form-Elements/demo.html"
+  ],
+  "dependencies": {
+    "http://jquery.com": "1.7+"
+  },
+  "bugs": {
+    "web": "https://github.com/karbassi/Custom-Form-Elements/issues"
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/karbassi/Custom-Form-Elements.git"
+    }
+  ],
+  "licenses": [
+    {
+      "name": "MIT",
+      "url": "http://karbassi.mit-license.org/"
+    }
+  ],
+  "homepage": "http://tech.karbassi.com/Custom-Form-Elements/"
+}
