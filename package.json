@@ -10,12 +10,13 @@
     }
   ],
   "demos": [
-    "http://tech.karbassi.com/Custom-Form-Elements/demo.html"
+    "/demo/demo.html"
   ],
   "dependencies": {
-    "http://jquery.com": "1.7+"
+    "jquery": "1.7"
   },
   "bugs": {
+    "mail": "ali@karbassi.com",
     "web": "https://github.com/karbassi/Custom-Form-Elements/issues"
   },
   "repositories": [
@@ -30,5 +31,5 @@
       "url": "http://karbassi.mit-license.org/"
     }
   ],
-  "homepage": "http://tech.karbassi.com/Custom-Form-Elements/"
+  "homepage": "http://karbassi.github.io/Custom-Form-Elements/"
 }
