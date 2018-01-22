@@ -1,14 +1,12 @@
 # Custom Form Elements
 
-![Maintained?](http://stillmaintained.com/karbassi/Custom-Form-Elements.png)
+[![Maintenance]](https://github.com/karbassi/Custom-Form-Elements/)
+[![GitHub issues]](https://github.com/karbassi/Custom-Form-Elements/issues)
+[![GitHub forks]](https://github.com/karbassi/Custom-Form-Elements/network)
+[![GitHub stars]](https://github.com/karbassi/Custom-Form-Elements/stargazers)
+[![GitHub license]](https://github.com/karbassi/Custom-Form-Elements)
 
 A lightweight custom form styler for radio, checkbox and select elements. Radio and Checkboxes have four states rather than just two.
-
-Developed by [Ali Karbassi](http://karbassi.com).
-
-This project lives on GitHub: [http://github.com/karbassi/Custom-Form-Elements](http://github.com/karbassi/Custom-Form-Elements)
-
-This whole project is licensed under the MIT License: [http://karbassi.mit-license.org](http://karbassi.mit-license.org)
 
 ## Tested Environments
 
@@ -27,7 +25,7 @@ This whole project is licensed under the MIT License: [http://karbassi.mit-licen
 * Requires [jQuery 1.7+](http://jquery.com)
 * All `form` elements require `id`s.
 
-## Note
+## Notes
 
 * Call once your document is loaded.
 * If you are dynamically loading content, use the `repaint` function.
@@ -135,3 +133,10 @@ jQuery(document).ready(function($) {
 
 });
 ```
+
+
+[Maintenance]: https://img.shields.io/maintenance/STATUS/2018.svg?style=for-the-badge
+[GitHub issues]: https://img.shields.io/github/issues/karbassi/Custom-Form-Elements.svg?style=for-the-badge
+[GitHub forks]: https://img.shields.io/github/forks/karbassi/Custom-Form-Elements.svg?style=for-the-badge
+[GitHub stars]: https://img.shields.io/github/stars/karbassi/Custom-Form-Elements.svg?style=for-the-badge
+[GitHub license]: https://img.shields.io/github/license/karbassi/Custom-Form-Elements.svg?style=for-the-badge
