@@ -1,35 +1,46 @@
 {
-  "name": "Custom Form Elements",
-  "description": "A lightweight custom form styler for radio, checkbox and select elements",
+  "name": "custom-form-elements",
   "version": "2.0.0",
-  "maintainers": [
-    {
-      "name": "Ali Karbassi",
-      "email": "ali@karbassi.com",
-      "web": "http://tech.karbassi.com"
-    }
-  ],
+  "description": "A lightweight custom form styler for radio, checkbox and select elements.",
+  "main": "custom-form-elements.js",
+  "directories": {
+    "doc": "docs",
+    "example": "docs/demo.html"
+  },
   "demos": [
-    "/demo/demo.html"
+    "/docs/demo.html"
   ],
+  "scripts": {
+    "build": "uglifyjs --comments /^!/ --compress --mangle --output custom-form-elements.min.js custom-form-elements.js",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karbassi/Custom-Form-Elements.git"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "html",
+    "css",
+    "radio",
+    "checkbox",
+    "select",
+    "form"
+  ],
+  "author": {
+    "name": "Ali Karbassi",
+    "email": "ali@karbassi.com",
+    "web": "http://tech.karbassi.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/karbassi/Custom-Form-Elements/issues"
+  },
+  "homepage": "https://github.com/karbassi/Custom-Form-Elements/",
   "dependencies": {
     "jquery": "1.7"
   },
-  "bugs": {
-    "mail": "ali@karbassi.com",
-    "web": "https://github.com/karbassi/Custom-Form-Elements/issues"
-  },
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/karbassi/Custom-Form-Elements.git"
-    }
-  ],
-  "licenses": [
-    {
-      "name": "MIT",
-      "url": "http://karbassi.mit-license.org/"
-    }
-  ],
-  "homepage": "http://karbassi.github.io/Custom-Form-Elements/"
+  "devDependencies": {
+    "uglify-js": "^3.3.8"
+  }
 }

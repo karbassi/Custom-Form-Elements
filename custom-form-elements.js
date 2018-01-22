@@ -1,5 +1,5 @@
 /*
-Custom Form Elements v0.15
+Custom Form Elements v2.0.0
 
 http://github.com/karbassi/Custom-Form-Elements
 
@@ -35,6 +35,7 @@ Example:
 
 */
 
+/*! Custom Form Elements v2.0.0 / http://github.com/karbassi/Custom-Form-Elements / Written by Ali Karbassi (karbassi.com) */
 (function(window, document, $) {
 
     var CustomFormElements = function(options) {
