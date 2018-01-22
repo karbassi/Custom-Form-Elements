@@ -135,7 +135,7 @@ jQuery(document).ready(function($) {
 ```
 
 
-[Maintenance]: https://img.shields.io/maintenance/STATUS/2018.svg?style=for-the-badge
+[Maintenance]: https://img.shields.io/maintenance/STATUS/2013.svg?style=for-the-badge
 [GitHub issues]: https://img.shields.io/github/issues/karbassi/Custom-Form-Elements.svg?style=for-the-badge
 [GitHub forks]: https://img.shields.io/github/forks/karbassi/Custom-Form-Elements.svg?style=for-the-badge
 [GitHub stars]: https://img.shields.io/github/stars/karbassi/Custom-Form-Elements.svg?style=for-the-badge
